@@ -28,6 +28,7 @@ Copy `.env.example` to `.env.local` for local development.
 - **Ignored / never commit:** `.env`, `.env*.local`, `.vercel/`, `node_modules/`, `.next/` — see [`.gitignore`](.gitignore). Secrets belong in Vercel **Environment Variables** or local `.env.local` only.
 - **Line endings:** [`.gitattributes`](.gitattributes) sets `text=auto` and `eol=lf` for text files to reduce noisy diffs across Windows and macOS.
 - **Contributors:** see [CONTRIBUTING.md](CONTRIBUTING.md) and the [PR template](.github/pull_request_template.md).
+- **CI:** [GitHub Actions](.github/workflows/ci.yml) runs **lint**, **`npm run type-check`**, and **`next build`** on pushes and PRs to `main` (build uses a dummy `NEXT_PUBLIC_SITE_URL` so it does not need your secrets).
 
 ```bash
 git status
@@ -42,6 +43,8 @@ git add -A && git commit -m "feat: describe change" && git push -u origin feat/y
 ```bash
 npm install
 npm run dev
+npm run lint
+npm run type-check
 npm run build   # or: vercel build (Vercel CLI)
 ```
 
@@ -113,7 +116,11 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 ## Project layout
 
 - [`.gitattributes`](.gitattributes) — Git EOL normalization for cross-platform clones.
+- [`.editorconfig`](.editorconfig) — shared editor defaults (indent, UTF-8, LF) alongside `.gitattributes`.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — branch/PR workflow; [`.github/pull_request_template.md`](.github/pull_request_template.md) — merge checklist.
+- [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — CI: ESLint, TypeScript, production build.
+- [`.github/dependabot.yml`](.github/dependabot.yml) — weekly npm + monthly GitHub Actions dependency PRs.
+- [SECURITY.md](SECURITY.md) — how to report security issues; secrets hygiene.
 - `vercel.json` — Vercel project defaults: **Next.js** framework, `npm install` + `next build` (see [Project Configuration](https://vercel.com/docs/project-configuration)).
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
 - `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready). **`openHouseWeekend`** drives the homepage open house section + Event JSON-LD; set **`active: false`** after the event (and update dates/embed when you run the next one).
@@ -130,7 +137,7 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 |--------|--------|
 | Git remote | `origin` → `https://github.com/DrJanDuffy/thelakesvegas.com.git`, branch `main` |
 | Local Vercel link | No `.vercel/project.json` (project not linked via CLI in this clone) |
-| GitHub Actions | No `.github/workflows/*` (no CI deploy fallback) |
+| GitHub Actions | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs lint / type-check / build (not a Vercel deploy) |
 | Vercel CLI (`vercel whoami` / `vercel project ls`) | Logged in as **drjanduffy**, team **janet-duffys-projects** — **no project** whose name/URL matches *thelakes* / *thelakesvegas* in listed pages (this repo was never imported there, or it uses a non-obvious name) |
 
 **Most likely cause:** There is **no Vercel project** connected to `DrJanDuffy/thelakesvegas.com`. Pushes do not deploy until you **import** the GitHub repo under the Vercel team you use (e.g. **janet-duffys-projects**) and grant the [Vercel GitHub app](https://vercel.com/docs/git/vercel-for-github) access to that repository.

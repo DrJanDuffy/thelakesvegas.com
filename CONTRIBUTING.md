@@ -16,7 +16,7 @@ git checkout -b feat/short-description
 ## Before you commit
 
 1. Copy [`.env.example`](.env.example) to `.env.local` for local secrets — **never** commit `.env` or `.env.local`.
-2. Run `npm run lint` and `npm run build` when you change app code.
+2. Run `npm run lint`, `npm run type-check`, and `npm run build` when you change app code (matches [CI](.github/workflows/ci.yml) on GitHub).
 3. Do **not** modify **`src/components/idx/*`** without explicit MLS/IDX approval (see repo rules).
 
 ## Commits

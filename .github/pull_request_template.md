@@ -4,7 +4,7 @@
 
 ## Checklist
 
-- [ ] `npm run build` (or `npx vercel build`) succeeds locally
+- [ ] `npm run lint`, `npm run type-check`, and `npm run build` (or `npx vercel build`) succeed locally
 - [ ] No secrets committed (`.env`, `.env.local`, API keys)
 - [ ] NAP / GBP-sensitive copy in `site-config` still matches your Google Business Profile (if touched)
 - [ ] Did **not** edit `src/components/idx/*` unless MLS/IDX approval is explicit
