@@ -1,5 +1,6 @@
 // Site Configuration — thelakesvegas.com (primary: www)
 // Berkshire Hathaway HomeServices Nevada Properties | Dr. Jan Duffy
+// Canonical site: https://www.thelakesvegas.com (GSC URL-prefix property should use this host)
 
 export const siteConfig = {
   name: "The Lakes Las Vegas",
@@ -25,6 +26,11 @@ export const agentInfo = {
   email: "DrDuffy@TheLakesVegas.com",
   brokerage: "Berkshire Hathaway HomeServices Nevada Properties",
 };
+
+/** Public hostname for NAP / visible “Website” lines (www primary). */
+export function sitePublicHostname(): string {
+  return new URL(siteConfig.url).hostname;
+}
 
 /** Absolute URL for this site (no trailing slash). */
 export function siteUrl(path = ""): string {

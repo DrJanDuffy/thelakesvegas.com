@@ -1,6 +1,12 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
-import { agentInfo, theLakesFacebook, theLakesInstagram } from "@/lib/site-config";
+import { Phone, Mail, MapPin, Globe, Facebook, Instagram, Linkedin } from "lucide-react";
+import {
+  agentInfo,
+  sitePublicHostname,
+  siteUrl,
+  theLakesFacebook,
+  theLakesInstagram,
+} from "@/lib/site-config";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -196,6 +202,16 @@ export default function Footer() {
                 >
                   {agentInfo.email}
                 </Link>
+              </li>
+              <li className="flex items-center">
+                <Globe className="h-5 w-5 mr-3 text-blue-400 flex-shrink-0" aria-hidden />
+                <a
+                  href={siteUrl("/")}
+                  className="text-slate-300 hover:text-white transition-colors text-sm"
+                  aria-label={`Visit ${sitePublicHostname()} (official website)`}
+                >
+                  {sitePublicHostname()}
+                </a>
               </li>
             </ul>
           </div>
