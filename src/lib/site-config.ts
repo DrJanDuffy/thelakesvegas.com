@@ -49,6 +49,12 @@ export const localSeo = {
   googleReviewsUrl: "https://g.page/r/heyberkshire/review",
 };
 
+/** Facebook Page: General settings name + username (thelakesvegas.com brand) */
+export const theLakesFacebook = {
+  pageName: "The Lakes in Las Vegas",
+  pageUrl: "https://www.facebook.com/thelakesvegas",
+};
+
 /** The Lakes community Instagram (@thelakesinlasvegas) — embed + footer link */
 export const theLakesInstagram = {
   profileUrl: "https://www.instagram.com/thelakesinlasvegas/",

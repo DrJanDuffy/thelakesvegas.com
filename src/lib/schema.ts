@@ -7,7 +7,14 @@
  */
 
 import { theLakesGeo } from "./the-lakes-aeo";
-import { siteConfig, agentInfo, officeInfo, agentStats } from "./site-config";
+import {
+  siteConfig,
+  agentInfo,
+  officeInfo,
+  agentStats,
+  theLakesFacebook,
+  theLakesInstagram,
+} from "./site-config";
 
 // ============================================================================
 // Types
@@ -64,10 +71,10 @@ export interface SeniorCommunityData {
 
 const BASE_URL = siteConfig.url;
 
-// Social media profiles (to be updated with actual URLs)
+// Social media profiles — The Lakes brand FB/IG + Dr. Jan on other networks
 export const socialProfiles = {
-  facebook: "https://www.facebook.com/drjanduffy",
-  instagram: "https://www.instagram.com/drjanduffy",
+  facebook: theLakesFacebook.pageUrl,
+  instagram: theLakesInstagram.profileUrl.replace(/\/$/, ""),
   linkedin: "https://www.linkedin.com/in/drjanduffy",
   tiktok: "https://www.tiktok.com/@drjanduffy",
   youtube: "https://www.youtube.com/@drjanduffy",

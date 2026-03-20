@@ -1,7 +1,7 @@
 // Google Business Profile Schema Data
 // Supports GBP ranking factors: Relevance, Distance, Prominence
 
-import { agentInfo, siteConfig, siteUrl } from "./site-config";
+import { agentInfo, siteConfig, siteUrl, theLakesFacebook, theLakesInstagram } from "./site-config";
 
 const siteHost = new URL(siteConfig.url).host;
 
@@ -265,8 +265,8 @@ export function generateLocalBusinessSchema() {
       bestRating: "5",
     },
     sameAs: [
-      "https://www.facebook.com/drjanduffy",
-      "https://www.instagram.com/drjanduffy",
+      theLakesFacebook.pageUrl,
+      theLakesInstagram.profileUrl.replace(/\/$/, ""),
       "https://www.linkedin.com/in/drjanduffy",
     ],
   };

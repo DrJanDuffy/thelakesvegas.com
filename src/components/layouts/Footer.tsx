@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
-import { agentInfo, theLakesInstagram } from "@/lib/site-config";
+import { agentInfo, theLakesFacebook, theLakesInstagram } from "@/lib/site-config";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,11 +18,11 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href="http://drjanduffy.realscout.com/"
+                href={theLakesFacebook.pageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors"
-                aria-label="Search Las Vegas Homes"
+                aria-label={`${theLakesFacebook.pageName} on Facebook`}
               >
                 <Facebook className="h-5 w-5" />
               </a>
