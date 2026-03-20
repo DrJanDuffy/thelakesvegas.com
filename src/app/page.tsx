@@ -447,37 +447,6 @@ export default function Home() {
         <WhyChooseUs />
         <ReviewsSection />
 
-        {theLakesInstagram.showEmbedOnHomepage ? (
-          <section
-            className="py-16 md:py-20 bg-slate-50 border-t border-slate-200"
-            aria-labelledby="instagram-the-lakes-heading"
-          >
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto text-center mb-10">
-                <h2
-                  id="instagram-the-lakes-heading"
-                  className="text-3xl md:text-4xl font-bold text-slate-900 mb-3"
-                >
-                  The Lakes on Instagram
-                </h2>
-                <p className="text-lg text-slate-600">
-                  Photos and updates from{" "}
-                  <a
-                    href={theLakesInstagram.profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 font-semibold hover:text-blue-700 underline"
-                  >
-                    @thelakesinlasvegas
-                  </a>
-                  .
-                </p>
-              </div>
-              <InstagramProfileEmbed permalink={theLakesInstagram.embedPermalink} />
-            </div>
-          </section>
-        ) : null}
-
         <FAQSection
           faqs={theLakesHomeFaqItems}
           title="The Lakes Las Vegas — frequently asked questions"
@@ -515,6 +484,41 @@ export default function Home() {
             </p>
           </div>
         </section>
+
+        {/* Social after primary CTA: avoids interrupting FAQ → conversion; optional engagement pre-footer */}
+        {theLakesInstagram.showEmbedOnHomepage ? (
+          <section
+            className="py-12 md:py-16 bg-white border-t border-slate-200"
+            aria-labelledby="instagram-the-lakes-heading"
+          >
+            <div className="container mx-auto px-4">
+              <div className="max-w-3xl mx-auto text-center mb-8">
+                <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                  Community
+                </p>
+                <h2
+                  id="instagram-the-lakes-heading"
+                  className="text-2xl md:text-3xl font-bold text-slate-900 mb-3"
+                >
+                  The Lakes on Instagram
+                </h2>
+                <p className="text-base text-slate-600">
+                  Neighborhood photos and updates on{" "}
+                  <a
+                    href={theLakesInstagram.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 font-semibold hover:text-blue-700 underline"
+                  >
+                    @thelakesinlasvegas
+                  </a>
+                  .
+                </p>
+              </div>
+              <InstagramProfileEmbed permalink={theLakesInstagram.embedPermalink} />
+            </div>
+          </section>
+        ) : null}
 
         {/* Last Updated */}
         <div className="bg-slate-100 py-4 text-center text-sm text-slate-500">

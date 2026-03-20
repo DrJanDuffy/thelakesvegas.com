@@ -55,7 +55,7 @@ export const theLakesInstagram = {
   /** Use Instagram’s recommended UTM on the embed permalink */
   embedPermalink:
     "https://www.instagram.com/thelakesinlasvegas/?utm_source=ig_embed&utm_campaign=loading",
-  /** Toggle homepage embed without removing code */
+  /** Homepage: after primary CTA, before “Last updated” / footer (keeps FAQ→convert flow intact) */
   showEmbedOnHomepage: true,
 };
 
