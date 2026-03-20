@@ -17,11 +17,14 @@ import {
   HelpCircle,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/buyers/first-time-buyers",
   title: "First-Time Home Buyers Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "First-time buyer in Las Vegas? Down payment assistance, builder incentives, and expert guidance from Dr. Jan Duffy at Berkshire Hathaway HomeServices. Call (702) 500-1942.",
+  description: "First-time buyer in Las Vegas? Down payment assistance, builder incentives, and expert guidance from Dr. Jan Duffy at Berkshire Hathaway HomeServices. Call (702) 500-1942.",
   keywords: [
     "first time home buyer Las Vegas",
     "first time buyer Nevada",
@@ -30,7 +33,7 @@ export const metadata: Metadata = {
     "VA loans Las Vegas",
     "Berkshire Hathaway HomeServices first time buyer",
   ],
-};
+});
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -71,13 +74,19 @@ const faqSchema = {
   ],
 };
 
+const firstTimeBuyersPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Buyers", url: "/buyers" },
+    { name: "First-Time Buyers", url: "/buyers/first-time-buyers" },
+  ]),
+  faqSchema
+);
+
 export default function FirstTimeBuyersPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="first-time-buyers-page-schema" schema={firstTimeBuyersPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

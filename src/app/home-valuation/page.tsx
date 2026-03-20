@@ -5,11 +5,18 @@ import CalendlyWidget from "@/components/calendly/CalendlyWidget";
 import Link from "next/link";
 import { Phone, CheckCircle, Home, TrendingUp, MapPin, Calculator, Clock, DollarSign } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/home-valuation",
   title: "Free Home Valuation Las Vegas | What's Your Home Worth? | Berkshire Hathaway HomeServices",
-  description:
-    "Get a free, accurate home valuation in Las Vegas from Dr. Jan Duffy at Berkshire Hathaway HomeServices. Expert CMA analysis for Summerlin, Henderson, Green Valley & all Las Vegas neighborhoods. Call (702) 500-1942.",
+  description: "Get a free, accurate home valuation in Las Vegas from Dr. Jan Duffy at Berkshire Hathaway HomeServices. Expert CMA analysis for Summerlin, Henderson, Green Valley & all Las Vegas neighborhoods. Call (702) 500-1942.",
   keywords: [
     "home valuation Las Vegas",
     "what is my home worth Las Vegas",
@@ -19,55 +26,44 @@ export const metadata: Metadata = {
     "Summerlin home value",
     "Henderson home value",
   ],
-};
+});
 
-// FAQ Schema for SEO
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How accurate are online home value estimates like Zillow's Zestimate?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Online estimates like Zillow's Zestimate can be off by 5-15% or more, especially in markets like Las Vegas where home features vary significantly. They cannot account for upgrades, condition, views, or lot characteristics. A professional CMA from a local expert provides far more accurate pricing.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What factors affect my Las Vegas home's value?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Key factors include location (neighborhood, school zone, proximity to amenities), square footage, lot size, number of bedrooms and bathrooms, age of the home, upgrades (kitchen, bathrooms, flooring), pool, views, HOA fees, and current market conditions. In Las Vegas, features like solar panels, energy efficiency, and covered patios also significantly impact value.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How long does a home valuation take?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Dr. Jan Duffy typically provides a comprehensive market analysis within 24-48 hours of receiving your property information. The analysis includes recent comparable sales, current competition, and a recommended price range.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is a home valuation the same as an appraisal?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. A home valuation or CMA (Comparative Market Analysis) is a real estate agent's estimate based on market data. An appraisal is a formal valuation by a licensed appraiser, typically required by lenders. CMAs are free and useful for listing decisions; appraisals cost $400-600 and are required for financing.",
-      },
-    },
-  ],
-};
+const homeValuationFaqs = [
+  {
+    question: "How accurate are online home value estimates like Zillow's Zestimate?",
+    answer:
+      "Online estimates like Zillow's Zestimate can be off by 5-15% or more, especially in markets like Las Vegas where home features vary significantly. They cannot account for upgrades, condition, views, or lot characteristics. A professional CMA from a local expert provides far more accurate pricing.",
+  },
+  {
+    question: "What factors affect my Las Vegas home's value?",
+    answer:
+      "Key factors include location (neighborhood, school zone, proximity to amenities), square footage, lot size, number of bedrooms and bathrooms, age of the home, upgrades (kitchen, bathrooms, flooring), pool, views, HOA fees, and current market conditions. In Las Vegas, features like solar panels, energy efficiency, and covered patios also significantly impact value.",
+  },
+  {
+    question: "How long does a home valuation take?",
+    answer:
+      "Dr. Jan Duffy typically provides a comprehensive market analysis within 24-48 hours of receiving your property information. The analysis includes recent comparable sales, current competition, and a recommended price range.",
+  },
+  {
+    question: "Is a home valuation the same as an appraisal?",
+    answer:
+      "No. A home valuation or CMA (Comparative Market Analysis) is a real estate agent's estimate based on market data. An appraisal is a formal valuation by a licensed appraiser, typically required by lenders. CMAs are free and useful for listing decisions; appraisals cost $400-600 and are required for financing.",
+  },
+];
+
+const homeValuationPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+    { name: "Home Valuation", url: "/home-valuation" },
+  ]),
+  generateFAQSchema(homeValuationFaqs)
+);
 
 export default function HomeValuationPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="home-valuation-page-schema" schema={homeValuationPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

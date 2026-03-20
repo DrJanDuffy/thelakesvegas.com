@@ -17,12 +17,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { agentInfo, siteUrl } from "@/lib/site-config";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/about",
   title: "About Dr. Jan Duffy | Berkshire Hathaway HomeServices Las Vegas",
-  description:
-    "Meet Dr. Jan Duffy, your trusted Berkshire Hathaway HomeServices Nevada Properties agent. Serving Las Vegas since 2008, $127M+ in transactions, Henderson & Summerlin specialist. Call (702) 500-1942.",
+  description: "Meet Dr. Jan Duffy, your trusted Berkshire Hathaway HomeServices Nevada Properties agent. Serving Las Vegas since 2008, $127M+ in transactions, Henderson & Summerlin specialist. Call (702) 500-1942.",
   keywords: [
     "Dr. Jan Duffy",
     "Berkshire Hathaway HomeServices agent",
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
     "Henderson real estate agent",
     "Summerlin realtor",
   ],
-};
+});
 
 // Person Schema for Dr. Jan Duffy
 const personSchema = {
@@ -70,6 +73,14 @@ const personSchema = {
     "California relocation",
   ],
 };
+
+const aboutPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "About", url: "/about" },
+  ]),
+  personSchema
+);
 
 const specializations = [
   {
@@ -116,10 +127,7 @@ const areasServed = [
 export default function AboutPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
-      />
+      <SchemaScript id="about-page-schema" schema={aboutPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

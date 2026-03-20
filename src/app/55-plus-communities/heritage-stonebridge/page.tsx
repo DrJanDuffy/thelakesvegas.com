@@ -15,8 +15,12 @@ import {
   Star,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities/heritage-stonebridge",
   title: "Heritage at Stonebridge Homes for Sale | Guard-Gated 55+ Summerlin | Dr. Jan Duffy",
   description:
     "Heritage at Stonebridge - boutique guard-gated 55+ community in Summerlin. Homes from $400K-$750K. Near Downtown Summerlin, Red Rock Canyon. Dr. Jan Duffy, BHHS. Call (702) 500-1942.",
@@ -28,13 +32,12 @@ export const metadata: Metadata = {
     "boutique 55+ community Las Vegas",
     "Berkshire Hathaway Heritage Stonebridge",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "Heritage at Stonebridge - Guard-Gated 55+ Living in Summerlin",
     description:
       "Boutique community with premium Summerlin location. Guard-gated security, near Downtown Summerlin. From $400K. Dr. Jan Duffy, BHHS.",
-    type: "website",
   },
-};
+});
 
 const communitySchema = {
   "@context": "https://schema.org",
@@ -55,13 +58,19 @@ const communitySchema = {
   },
 };
 
+const heritageStonebridgePageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+    { name: "Heritage at Stonebridge", url: "/55-plus-communities/heritage-stonebridge" },
+  ]),
+  communitySchema
+);
+
 export default function HeritageAtStonebridgePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(communitySchema) }}
-      />
+      <SchemaScript id="heritage-stonebridge-page-schema" schema={heritageStonebridgePageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

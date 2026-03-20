@@ -13,11 +13,20 @@ import {
   Shield,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/sellers/move-up",
   title: "Move-Up Sellers Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Ready for your next chapter? Dr. Jan Duffy helps Las Vegas homeowners leverage equity into their dream home. Sell and buy seamlessly. Call (702) 500-1942.",
+  description: "Ready for your next chapter? Dr. Jan Duffy helps Las Vegas homeowners leverage equity into their dream home. Sell and buy seamlessly. Call (702) 500-1942.",
   keywords: [
     "move up buyer Las Vegas",
     "sell and buy Las Vegas",
@@ -25,11 +34,49 @@ export const metadata: Metadata = {
     "upgrade home Las Vegas",
     "Berkshire Hathaway HomeServices seller",
   ],
-};
+});
+
+const moveUpSellerFaqs = [
+  {
+    question: "How much equity do I need to move up?",
+    answer:
+      "Most move-up buyers have 20-40% equity in their current home. If you purchased between 2015-2021, Las Vegas appreciation means you likely have $100,000-$250,000+ in equity. Dr. Jan provides free equity analysis to show exactly what you have to work with.",
+  },
+  {
+    question: "What if I can't find a new home before selling?",
+    answer:
+      "Several options exist: negotiate a rent-back agreement (stay in your sold home for 30-60 days), arrange temporary housing, or use a bridge loan to buy before selling. Dr. Jan helps you choose the best strategy for your situation.",
+  },
+  {
+    question: "Should I upgrade or just get more space?",
+    answer:
+      "It depends on your goals. Sometimes moving to a larger home in your current neighborhood is the best value. Other times, upgrading to a premium location provides better long-term appreciation. Dr. Jan analyzes both options to help you decide.",
+  },
+  {
+    question: "How do schools factor into a move-up decision?",
+    answer:
+      "Schools significantly impact both your quality of life and resale value. Moving to better school zones (like Summerlin's Palo Verde High School district or Henderson's Coronado) often justifies higher prices through appreciation and demand.",
+  },
+  {
+    question: "What are the tax implications of selling and buying?",
+    answer:
+      "If you've lived in your home 2+ years, up to $250,000 ($500,000 for couples) in gains are tax-free. For larger gains, consult a tax advisor. Dr. Jan can refer you to trusted CPAs who specialize in real estate transactions.",
+  },
+];
+
+const moveUpSellerSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+    { name: "Move-Up Sellers", url: "/sellers/move-up" },
+  ]),
+  generateFAQSchema(moveUpSellerFaqs)
+);
 
 export default function MoveUpSellerPage() {
   return (
     <>
+      <SchemaScript id="sellers-move-up-schema" schema={moveUpSellerSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -338,41 +385,12 @@ export default function MoveUpSellerPage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Move-Up Seller FAQs
-            </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "How much equity do I need to move up?",
-                  a: "Most move-up buyers have 20-40% equity in their current home. If you purchased between 2015-2021, Las Vegas appreciation means you likely have $100,000-$250,000+ in equity. Dr. Jan provides free equity analysis to show exactly what you have to work with.",
-                },
-                {
-                  q: "What if I can't find a new home before selling?",
-                  a: "Several options exist: negotiate a rent-back agreement (stay in your sold home for 30-60 days), arrange temporary housing, or use a bridge loan to buy before selling. Dr. Jan helps you choose the best strategy for your situation.",
-                },
-                {
-                  q: "Should I upgrade or just get more space?",
-                  a: "It depends on your goals. Sometimes moving to a larger home in your current neighborhood is the best value. Other times, upgrading to a premium location provides better long-term appreciation. Dr. Jan analyzes both options to help you decide.",
-                },
-                {
-                  q: "How do schools factor into a move-up decision?",
-                  a: "Schools significantly impact both your quality of life and resale value. Moving to better school zones (like Summerlin's Palo Verde High School district or Henderson's Coronado) often justifies higher prices through appreciation and demand.",
-                },
-                {
-                  q: "What are the tax implications of selling and buying?",
-                  a: "If you've lived in your home 2+ years, up to $250,000 ($500,000 for couples) in gains are tax-free. For larger gains, consult a tax advisor. Dr. Jan can refer you to trusted CPAs who specialize in real estate transactions.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-white border border-slate-200 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Move-Up Seller FAQs"
+            subtitle="Equity, timing, and Las Vegas upgrade strategies"
+            faqs={moveUpSellerFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

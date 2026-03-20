@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -27,11 +27,38 @@ export default function InstagramProfileEmbed({
   embedClickToLoad = false,
 }: InstagramProfileEmbedProps) {
   const [loaded, setLoaded] = useState(!embedClickToLoad);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loaded) return;
     window.instgrm?.Embeds?.process();
   }, [permalink, loaded]);
+
+  /** Instagram injects the iframe without a title; set it for screen readers. */
+  useEffect(() => {
+    if (!loaded || !containerRef.current) return;
+    const root = containerRef.current;
+    const iframeTitle = "The Lakes Las Vegas on Instagram";
+    const patch = () => {
+      root.querySelectorAll('iframe.instagram-media, iframe[id^="instagram-embed"]').forEach(
+        (node) => {
+          if (node instanceof HTMLIFrameElement && !node.title.trim()) {
+            node.title = iframeTitle;
+          }
+        },
+      );
+    };
+    patch();
+    const observer = new MutationObserver(patch);
+    observer.observe(root, { childList: true, subtree: true });
+    const intervalId = window.setInterval(patch, 400);
+    const clearIntervalTimer = window.setTimeout(() => window.clearInterval(intervalId), 20_000);
+    return () => {
+      observer.disconnect();
+      window.clearInterval(intervalId);
+      window.clearTimeout(clearIntervalTimer);
+    };
+  }, [loaded]);
 
   if (!loaded) {
     return (
@@ -66,7 +93,7 @@ export default function InstagramProfileEmbed({
   }
 
   return (
-    <div className={className}>
+    <div ref={containerRef} className={className}>
       <blockquote
         className="instagram-media m-px mx-auto max-w-[540px] min-w-[326px] w-[calc(100%-2px)] rounded-sm border-0 bg-white p-0 shadow-[0_0_1px_0_rgba(0,0,0,0.5),0_1px_10px_0_rgba(0,0,0,0.15)]"
         data-instgrm-permalink={permalink}

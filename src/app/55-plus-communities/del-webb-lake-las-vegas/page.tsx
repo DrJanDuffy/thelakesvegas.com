@@ -12,11 +12,21 @@ import {
   CheckCircle,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateSeniorCommunitySchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities/del-webb-lake-las-vegas",
   title: "Del Webb at Lake Las Vegas Homes | Berkshire Hathaway HomeServices",
-  description:
-    "Lakefront 55+ living at Del Webb Lake Las Vegas. Homes from $400K-$900K. Resort amenities, stunning lake and mountain views. Dr. Jan Duffy. Call (702) 500-1942.",
+  description: "Lakefront 55+ living at Del Webb Lake Las Vegas. Homes from $400K-$900K. Resort amenities, stunning lake and mountain views. Dr. Jan Duffy. Call (702) 500-1942.",
   keywords: [
     "Del Webb Lake Las Vegas",
     "Lake Las Vegas 55 plus",
@@ -24,11 +34,65 @@ export const metadata: Metadata = {
     "lakefront retirement community",
     "Berkshire Hathaway Del Webb",
   ],
-};
+});
+
+const delWebbLakeFaqs = [
+  {
+    question: "What is the age requirement at Del Webb at Lake Las Vegas?",
+    answer:
+      "Del Webb is an active adult 55+ community. At least one resident must meet age requirements per association rules. Dr. Jan Duffy explains current resale and occupancy guidelines during your tour.",
+  },
+  {
+    question: "What do HOA fees typically cover at Del Webb Lake Las Vegas?",
+    answer:
+      "Monthly HOA fees often fall around $200–$280 (subject to change) and commonly cover amenities, landscaping, and community maintenance. Exact inclusions vary by phase—request the latest budget and CC&Rs before you buy.",
+  },
+  {
+    question: "How does Del Webb at Lake Las Vegas compare to Sun City Summerlin?",
+    answer:
+      "Del Webb Lake Las Vegas emphasizes lakefront resort living in the Henderson area, while Sun City Summerlin is larger and deeply integrated into Summerlin. Dr. Jan helps you compare HOA culture, amenities, and commute times.",
+  },
+  {
+    question: "Can Berkshire Hathaway HomeServices represent me on new construction and resales?",
+    answer:
+      "Yes. Dr. Jan Duffy (Nevada license S.0197614.LLC) with Berkshire Hathaway HomeServices Nevada Properties assists with resale purchases and can advise when buying from the builder. Call (702) 500-1942.",
+  },
+  {
+    question: "What price ranges should I expect?",
+    answer:
+      "Homes have ranged roughly $400K–$900K depending on floor plan, views, and condition. For current inventory and negotiation strategy, contact Dr. Jan for an updated market snapshot.",
+  },
+];
+
+const delWebbLakeSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+    { name: "Del Webb at Lake Las Vegas", url: "/55-plus-communities/del-webb-lake-las-vegas" },
+  ]),
+  generateSeniorCommunitySchema({
+    name: "Del Webb at Lake Las Vegas",
+    description:
+      "Lakefront 55+ Del Webb community at Lake Las Vegas with resort amenities, modern homes from 2016+, and access to lake and golf lifestyle.",
+    priceRange: "$400,000 - $900,000",
+    numberOfHomes: 1800,
+    yearBuilt: "2016+",
+    hoaFees: "$200-$280/mo (approximate; verify with HOA)",
+    amenities: [
+      { name: "Resort-style pool & spa" },
+      { name: "Fitness center" },
+      { name: "Pickleball courts" },
+      { name: "Lifestyle programming" },
+      { name: "Lake Las Vegas access" },
+    ],
+  }),
+  generateFAQSchema(delWebbLakeFaqs)
+);
 
 export default function DelWebbLakeLasVegasPage() {
   return (
     <>
+      <SchemaScript id="del-webb-lake-las-vegas-schema" schema={delWebbLakeSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -55,6 +119,7 @@ export default function DelWebbLakeLasVegasPage() {
             <p className="text-xl text-slate-600">
               Modern homes. Lake views. Resort living. The newest Del Webb in Las Vegas.
             </p>
+            <LocalServiceAreaBlurb topic="Del Webb and 55+ community tours" />
           </div>
 
           {/* Quick Stats */}
@@ -240,6 +305,13 @@ export default function DelWebbLakeLasVegasPage() {
               </div>
             </div>
           </section>
+
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Del Webb at Lake Las Vegas FAQs"
+            subtitle="55+ living, HOA fees, and buying with Dr. Jan Duffy"
+            faqs={delWebbLakeFaqs}
+          />
 
           {/* Expert Quote */}
           <section className="mb-16 max-w-4xl mx-auto">

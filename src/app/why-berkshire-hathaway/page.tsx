@@ -4,12 +4,15 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { Shield, Users, Globe, Award, TrendingUp, CheckCircle, Phone } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { siteUrl } from "@/lib/site-config";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/why-berkshire-hathaway",
   title: "Why Choose Berkshire Hathaway HomeServices | Las Vegas Real Estate",
-  description:
-    "Discover why Berkshire Hathaway HomeServices is the most trusted name in real estate. Backed by Warren Buffett, with 50,000+ agents worldwide. Work with BHHS Nevada Properties today.",
+  description: "Discover why Berkshire Hathaway HomeServices is the most trusted name in real estate. Backed by Warren Buffett, with 50,000+ agents worldwide. Work with BHHS Nevada Properties today.",
   keywords: [
     "Berkshire Hathaway HomeServices",
     "why choose BHHS",
@@ -17,7 +20,7 @@ export const metadata: Metadata = {
     "trusted real estate brand",
     "BHHS Nevada Properties",
   ],
-};
+});
 
 // Organization Schema
 const organizationSchema = {
@@ -35,13 +38,18 @@ const organizationSchema = {
   },
 };
 
+const whyBerkshirePageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Why Berkshire Hathaway", url: "/why-berkshire-hathaway" },
+  ]),
+  organizationSchema
+);
+
 export default function WhyBerkshireHathawayPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
+      <SchemaScript id="why-berkshire-hathaway-page-schema" schema={whyBerkshirePageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

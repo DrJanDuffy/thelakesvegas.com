@@ -16,11 +16,14 @@ import {
   DollarSign,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/buyers/luxury-homes-las-vegas",
   title: "Luxury Homes Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Las Vegas luxury real estate from $1.2M to $10M+. Guard-gated estates, Strip penthouses, and custom homes. Dr. Jan Duffy provides discrete, expert representation. Call (702) 500-1942.",
+  description: "Las Vegas luxury real estate from $1.2M to $10M+. Guard-gated estates, Strip penthouses, and custom homes. Dr. Jan Duffy provides discrete, expert representation. Call (702) 500-1942.",
   keywords: [
     "luxury homes Las Vegas",
     "The Ridges Las Vegas",
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
     "guard gated communities Las Vegas",
     "Berkshire Hathaway luxury homes",
   ],
-};
+});
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -62,13 +65,19 @@ const faqSchema = {
   ],
 };
 
+const buyersLuxuryHomesPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Buyers", url: "/buyers" },
+    { name: "Luxury Homes", url: "/buyers/luxury-homes-las-vegas" },
+  ]),
+  faqSchema
+);
+
 export default function LuxuryHomesPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="buyers-luxury-homes-page-schema" schema={buyersLuxuryHomesPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

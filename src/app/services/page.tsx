@@ -20,11 +20,21 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateServiceSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/services",
   title: "Real Estate Services Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Comprehensive real estate services from Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Buying, selling, luxury, investment, relocation, 55+ communities, and new construction. Call (702) 500-1942.",
+  description: "Comprehensive real estate services from Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Buying, selling, luxury, investment, relocation, 55+ communities, and new construction. Call (702) 500-1942.",
   keywords: [
     "Las Vegas real estate services",
     "Berkshire Hathaway services",
@@ -34,19 +44,50 @@ export const metadata: Metadata = {
     "55+ community specialist",
     "California relocation Las Vegas",
   ],
-};
+});
 
-const servicesSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  provider: {
-    "@type": "RealEstateAgent",
-    name: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-    telephone: "+17025001942",
+const servicesPageFaqs = [
+  {
+    question: "What real estate services does Dr. Jan Duffy offer?",
+    answer:
+      "Buyer and seller representation, luxury homes, new construction, investment consulting, 55+ communities, California relocation, home valuations, and probate/divorce sales—through Berkshire Hathaway HomeServices Nevada Properties. Call (702) 500-1942.",
   },
-  areaServed: "Las Vegas, Henderson, Summerlin, Clark County NV",
-  serviceType: "Real Estate Services",
-};
+  {
+    question: "Do buyers pay commission in Nevada?",
+    answer:
+      "Typically the seller pays the listing and buyer-broker compensation offered in the MLS. Dr. Jan explains agency relationships and any buyer fees before you write an offer.",
+  },
+  {
+    question: "What areas do you serve?",
+    answer:
+      "Las Vegas, Henderson, Summerlin, North Las Vegas, The Lakes, Green Valley, Inspirada, and all of Clark County, Nevada.",
+  },
+  {
+    question: "How do I get a free home valuation?",
+    answer:
+      "Request a consultation at /home-valuation or call (702) 500-1942. Dr. Jan Duffy uses MLS data and local comps—Nevada license S.0197614.LLC.",
+  },
+  {
+    question: "Why Berkshire Hathaway HomeServices?",
+    answer:
+      "The brand combines local expertise with national reach—important for marketing luxury listings and relocation clients moving to Las Vegas.",
+  },
+];
+
+const servicesPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Services", url: "/services" },
+  ]),
+  generateServiceSchema({
+    name: "Las Vegas Real Estate Services | Dr. Jan Duffy",
+    description:
+      "Buying, selling, luxury, investment, relocation, 55+ communities, and new construction with Berkshire Hathaway HomeServices Nevada Properties.",
+    url: "/services",
+    areaServed: ["Las Vegas", "Henderson", "Summerlin", "North Las Vegas", "Clark County"],
+  }),
+  generateFAQSchema(servicesPageFaqs)
+);
 
 const coreServices = [
   {
@@ -166,15 +207,19 @@ const sellerTypes = [
 export default function ServicesPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
-      />
+      <SchemaScript id="services-page-schema" schema={servicesPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero */}
           <div className="max-w-4xl mx-auto text-center mb-16">
+            <nav className="text-sm text-slate-500 mb-6 text-left max-w-4xl mx-auto">
+              <Link href="/" className="hover:text-blue-600">
+                Home
+              </Link>
+              {" / "}
+              <span className="text-slate-900">Services</span>
+            </nav>
             <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
               Berkshire Hathaway HomeServices Nevada Properties
             </div>
@@ -187,6 +232,7 @@ export default function ServicesPage() {
               buying your first home, selling a luxury estate, or relocating from California, 
               you'll receive expert guidance every step of the way.
             </p>
+            <LocalServiceAreaBlurb topic="Full-service Las Vegas real estate" />
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center">
                 <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
@@ -477,6 +523,13 @@ export default function ServicesPage() {
               </div>
             </div>
           </section>
+
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Real estate services FAQs"
+            subtitle="Buying, selling, and working with Dr. Jan Duffy"
+            faqs={servicesPageFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

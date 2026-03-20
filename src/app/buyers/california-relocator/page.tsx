@@ -17,12 +17,15 @@ import {
   TrendingUp,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { siteUrl } from "@/lib/site-config";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/buyers/california-relocator",
   title: "Relocating from California to Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Moving from California to Las Vegas? Zero state income tax, 40-60% lower home prices, same sunshine. Dr. Jan Duffy helps CA relocators find their perfect Las Vegas home. Call (702) 500-1942.",
+  description: "Moving from California to Las Vegas? Zero state income tax, 40-60% lower home prices, same sunshine. Dr. Jan Duffy helps CA relocators find their perfect Las Vegas home. Call (702) 500-1942.",
   keywords: [
     "California to Las Vegas relocation",
     "moving from California to Nevada",
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
     "Las Vegas homes California buyers",
     "Berkshire Hathaway HomeServices relocation",
   ],
-};
+});
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -97,17 +100,20 @@ const realEstateAgentSchema = {
   priceRange: "$350,000 - $10,000,000+",
 };
 
+const californiaRelocatorPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Buyers", url: "/buyers" },
+    { name: "California Relocator", url: "/buyers/california-relocator" },
+  ]),
+  faqSchema,
+  realEstateAgentSchema
+);
+
 export default function CaliforniaRelocatorPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(realEstateAgentSchema) }}
-      />
+      <SchemaScript id="california-relocator-page-schema" schema={californiaRelocatorPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

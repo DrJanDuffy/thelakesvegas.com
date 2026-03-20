@@ -4,11 +4,14 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { TrendingUp, TrendingDown, Home, Calendar, DollarSign, BarChart, Phone } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/market-report",
   title: "Las Vegas Real Estate Market Report January 2026 | Berkshire Hathaway HomeServices",
-  description:
-    "Get the latest Las Vegas real estate market statistics for January 2026. Median prices, days on market, inventory levels, and expert analysis from Berkshire Hathaway HomeServices Nevada Properties.",
+  description: "Get the latest Las Vegas real estate market statistics for January 2026. Median prices, days on market, inventory levels, and expert analysis from Berkshire Hathaway HomeServices Nevada Properties.",
   keywords: [
     "Las Vegas real estate market",
     "Las Vegas home prices 2026",
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
     "Nevada housing market",
     "Berkshire Hathaway market report",
   ],
-};
+});
 
 // Report Schema
 const reportSchema = {
@@ -35,13 +38,18 @@ const reportSchema = {
   },
 };
 
+const marketReportPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Market Report", url: "/market-report" },
+  ]),
+  reportSchema
+);
+
 export default function MarketReportPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reportSchema) }}
-      />
+      <SchemaScript id="market-report-page-schema" schema={marketReportPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

@@ -14,11 +14,20 @@ import {
   Users,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/sellers/divorce-probate",
   title: "Divorce & Probate Home Sales Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Sensitive real estate situations handled with discretion. Dr. Jan Duffy helps with divorce sales, probate, estate liquidation, and court-ordered sales. Call (702) 500-1942.",
+  description: "Sensitive real estate situations handled with discretion. Dr. Jan Duffy helps with divorce sales, probate, estate liquidation, and court-ordered sales. Call (702) 500-1942.",
   keywords: [
     "divorce home sale Las Vegas",
     "probate real estate Las Vegas",
@@ -26,11 +35,54 @@ export const metadata: Metadata = {
     "court ordered sale Nevada",
     "Berkshire Hathaway HomeServices divorce",
   ],
-};
+});
+
+const divorceProbateFaqs = [
+  {
+    question: "Can one spouse sell the house without the other's consent?",
+    answer:
+      "In Nevada, generally no. Both spouses must agree to sell community property. If one spouse refuses, the other can petition the court for an order to sell. Dr. Jan has worked with many cases where court intervention was needed and can provide valuations and testimony if required.",
+  },
+  {
+    question: "How long does a probate sale take in Nevada?",
+    answer:
+      "The probate process typically takes 6-12 months, but the house can often be sold during this period. Once Letters Testamentary are issued, the personal representative has authority to list. The actual sale (listing to closing) usually takes 30-60 days, similar to regular sales.",
+  },
+  {
+    question: "Do I need to make repairs before selling an estate property?",
+    answer:
+      "Not necessarily. Many estate sales are 'as-is' to avoid further estate expenses. Dr. Jan can advise on whether minimal improvements would significantly increase the sale price. She also has connections to estate cleanout services and can coordinate property preparation.",
+  },
+  {
+    question: "What if the divorcing parties disagree on the listing price?",
+    answer:
+      "Dr. Jan provides an objective market analysis that both parties can review. If disagreement persists, a formal appraisal (at shared cost) can settle the matter. In contentious cases, the listing price may be court-ordered based on appraised value.",
+  },
+  {
+    question: "Can I sell a property if there are multiple heirs who disagree?",
+    answer:
+      "Yes, but it requires navigating the disagreement. Often, one heir can buy out others. If that's not possible, a partition action may force a sale. Dr. Jan has experience facilitating consensus and can work with your estate attorney on options.",
+  },
+  {
+    question: "What happens to the mortgage during a divorce sale?",
+    answer:
+      "The mortgage is paid off at closing from the sale proceeds. If the home is underwater (worth less than owed), options include short sale negotiation with the lender or other arrangements. Dr. Jan can advise on the best approach for your situation.",
+  },
+];
+
+const divorceProbateSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+    { name: "Divorce & Probate", url: "/sellers/divorce-probate" },
+  ]),
+  generateFAQSchema(divorceProbateFaqs)
+);
 
 export default function DivorceProbatePage() {
   return (
     <>
+      <SchemaScript id="sellers-divorce-probate-schema" schema={divorceProbateSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -58,6 +110,7 @@ export default function DivorceProbatePage() {
               When life gets complicated, you need an agent who handles sensitive transactions
               with discretion, expertise, and compassion.
             </p>
+            <LocalServiceAreaBlurb topic="Divorce, probate, and court-coordinated home sales" />
             <a
               href="tel:+17025001942"
               className="inline-flex items-center bg-blue-600 text-white px-8 py-4 rounded-md font-bold text-lg hover:bg-blue-700 transition-colors"
@@ -405,45 +458,12 @@ export default function DivorceProbatePage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "Can one spouse sell the house without the other's consent?",
-                  a: "In Nevada, generally no. Both spouses must agree to sell community property. If one spouse refuses, the other can petition the court for an order to sell. Dr. Jan has worked with many cases where court intervention was needed and can provide valuations and testimony if required.",
-                },
-                {
-                  q: "How long does a probate sale take in Nevada?",
-                  a: "The probate process typically takes 6-12 months, but the house can often be sold during this period. Once Letters Testamentary are issued, the personal representative has authority to list. The actual sale (listing to closing) usually takes 30-60 days, similar to regular sales.",
-                },
-                {
-                  q: "Do I need to make repairs before selling an estate property?",
-                  a: "Not necessarily. Many estate sales are 'as-is' to avoid further estate expenses. Dr. Jan can advise on whether minimal improvements would significantly increase the sale price. She also has connections to estate cleanout services and can coordinate property preparation.",
-                },
-                {
-                  q: "What if the divorcing parties disagree on the listing price?",
-                  a: "Dr. Jan provides an objective market analysis that both parties can review. If disagreement persists, a formal appraisal (at shared cost) can settle the matter. In contentious cases, the listing price may be court-ordered based on appraised value.",
-                },
-                {
-                  q: "Can I sell a property if there are multiple heirs who disagree?",
-                  a: "Yes, but it requires navigating the disagreement. Often, one heir can buy out others. If that's not possible, a partition action may force a sale. Dr. Jan has experience facilitating consensus and can work with your estate attorney on options.",
-                },
-                {
-                  q: "What happens to the mortgage during a divorce sale?",
-                  a: "The mortgage is paid off at closing from the sale proceeds. If the home is underwater (worth less than owed), options include short sale negotiation with the lender or other arrangements. Dr. Jan can advise on the best approach for your situation.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-white border border-slate-200 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Divorce & probate FAQs"
+            subtitle="Nevada process, timing, and neutral representation"
+            faqs={divorceProbateFaqs}
+          />
 
           {/* Why BHHS Matters */}
           <section className="mb-16 max-w-5xl mx-auto">

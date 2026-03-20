@@ -14,11 +14,20 @@ import {
   Calendar,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/sellers/relocation",
   title: "Relocation Home Sales Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Leaving Las Vegas for a new opportunity? Dr. Jan Duffy helps relocating homeowners sell fast and coordinates with BHHS offices nationwide. Call (702) 500-1942.",
+  description: "Leaving Las Vegas for a new opportunity? Dr. Jan Duffy helps relocating homeowners sell fast and coordinates with BHHS offices nationwide. Call (702) 500-1942.",
   keywords: [
     "relocation sale Las Vegas",
     "job relocation Las Vegas",
@@ -26,11 +35,49 @@ export const metadata: Metadata = {
     "Berkshire Hathaway relocation services",
     "corporate relocation Nevada",
   ],
-};
+});
+
+const sellerRelocationFaqs = [
+  {
+    question: "My job starts in 3 weeks. Is that enough time to sell?",
+    answer:
+      "Yes—urgently, but it's possible. We can list immediately, price aggressively for quick sale, and leverage our investor/cash buyer network. You may leave before closing, but we manage everything remotely. Dr. Jan has helped many clients sell within 2-4 weeks when necessary.",
+  },
+  {
+    question: "Should I sell before or after I move?",
+    answer:
+      "It depends on your finances and timeline. Selling first means you know exactly how much equity you have for your new purchase. Selling after gives you time to settle in but requires carrying costs or a bridge loan. Dr. Jan advises based on your specific situation.",
+  },
+  {
+    question: "What if I have a corporate buyout offer?",
+    answer:
+      "Corporate buyouts typically offer 90-95% of appraised value. Sometimes you can do better selling on the open market. Dr. Jan provides a market analysis so you can compare the buyout to likely market sale proceeds (minus costs).",
+  },
+  {
+    question: "How do I handle showings if I've already left?",
+    answer:
+      "Dr. Jan manages everything: lockbox access, feedback collection, and offer presentation via video call. Many relocating sellers are long gone before their home sells—it's routine and we have systems for it.",
+  },
+  {
+    question: "What about my stuff? Should I move it before listing?",
+    answer:
+      "Partially furnished homes often show better than empty ones. Dr. Jan advises on what to take, what to leave, and whether professional staging makes sense. For urgent sales, we can list with minimal preparation.",
+  },
+];
+
+const sellerRelocationSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+    { name: "Relocation", url: "/sellers/relocation" },
+  ]),
+  generateFAQSchema(sellerRelocationFaqs)
+);
 
 export default function RelocationPage() {
   return (
     <>
+      <SchemaScript id="sellers-relocation-schema" schema={sellerRelocationSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -58,6 +105,7 @@ export default function RelocationPage() {
               Sell your Las Vegas home while you focus on your new chapter.
               We coordinate both ends of your move.
             </p>
+            <LocalServiceAreaBlurb topic="Relocation listing strategy and remote closings" />
             <a
               href="tel:+17025001942"
               className="inline-flex items-center bg-blue-600 text-white px-8 py-4 rounded-md font-bold text-lg hover:bg-blue-700 transition-colors"
@@ -393,41 +441,12 @@ export default function RelocationPage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Relocation FAQs
-            </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "My job starts in 3 weeks. Is that enough time to sell?",
-                  a: "Yes—urgently, but it's possible. We can list immediately, price aggressively for quick sale, and leverage our investor/cash buyer network. You may leave before closing, but we manage everything remotely. Dr. Jan has helped many clients sell within 2-4 weeks when necessary.",
-                },
-                {
-                  q: "Should I sell before or after I move?",
-                  a: "It depends on your finances and timeline. Selling first means you know exactly how much equity you have for your new purchase. Selling after gives you time to settle in but requires carrying costs or a bridge loan. Dr. Jan advises based on your specific situation.",
-                },
-                {
-                  q: "What if I have a corporate buyout offer?",
-                  a: "Corporate buyouts typically offer 90-95% of appraised value. Sometimes you can do better selling on the open market. Dr. Jan provides a market analysis so you can compare the buyout to likely market sale proceeds (minus costs).",
-                },
-                {
-                  q: "How do I handle showings if I've already left?",
-                  a: "Dr. Jan manages everything: lockbox access, feedback collection, and offer presentation via video call. Many relocating sellers are long gone before their home sells—it's routine and we have systems for it.",
-                },
-                {
-                  q: "What about my stuff? Should I move it before listing?",
-                  a: "Partially furnished homes often show better than empty ones. Dr. Jan advises on what to take, what to leave, and whether professional staging makes sense. For urgent sales, we can list with minimal preparation.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-white border border-slate-200 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Relocation FAQs"
+            subtitle="Timing, corporate buyouts, and remote sales"
+            faqs={sellerRelocationFaqs}
+          />
 
           {/* Coming TO Las Vegas */}
           <section className="mb-16 max-w-5xl mx-auto">

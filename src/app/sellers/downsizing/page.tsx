@@ -14,11 +14,20 @@ import {
   Sun,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/sellers/downsizing",
   title: "Downsizing in Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Ready to simplify? Dr. Jan Duffy helps Las Vegas homeowners extract equity and transition to low-maintenance living. 55+ communities, condos, and more. Call (702) 500-1942.",
+  description: "Ready to simplify? Dr. Jan Duffy helps Las Vegas homeowners extract equity and transition to low-maintenance living. 55+ communities, condos, and more. Call (702) 500-1942.",
   keywords: [
     "downsizing Las Vegas",
     "sell large home Las Vegas",
@@ -26,11 +35,49 @@ export const metadata: Metadata = {
     "empty nester Las Vegas",
     "Berkshire Hathaway HomeServices downsizing",
   ],
-};
+});
+
+const downsizingFaqs = [
+  {
+    question: "How much can I expect to pocket when downsizing?",
+    answer:
+      "Most downsizers moving from large family homes ($650K-$900K) to 55+ communities or condos ($400K-$550K) walk away with $150,000-$350,000+ in net equity after all costs. Dr. Jan provides a detailed projection based on your specific situation.",
+  },
+  {
+    question: "What if my home needs repairs before selling?",
+    answer:
+      "Dr. Jan helps you prioritize repairs that matter—and skip those that don't. Often, minor cosmetic updates (paint, landscaping) provide the best ROI. For larger issues, she can connect you with contractors or explore as-is selling options.",
+  },
+  {
+    question: "How do I choose between 55+ communities?",
+    answer:
+      "Key factors include HOA fees and what they cover, community size and culture, amenities that match your interests, location relative to family/healthcare, and financial stability of the HOA. Dr. Jan tours communities with you and provides unbiased comparisons.",
+  },
+  {
+    question: "Can I buy before selling my current home?",
+    answer:
+      "Yes, several options exist: bridge loans, HELOCs, or making offers contingent on selling. Dr. Jan works with lenders who specialize in these scenarios and can advise on the best approach for your financial situation.",
+  },
+  {
+    question: "What about all my stuff?",
+    answer:
+      "Decluttering is part of downsizing. Dr. Jan recommends starting early—months before listing. She can refer you to professional organizers and estate sale companies if needed. Many clients find the process liberating once they start.",
+  },
+];
+
+const downsizingSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+    { name: "Downsizing", url: "/sellers/downsizing" },
+  ]),
+  generateFAQSchema(downsizingFaqs)
+);
 
 export default function DownsizingPage() {
   return (
     <>
+      <SchemaScript id="sellers-downsizing-schema" schema={downsizingSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -57,6 +104,7 @@ export default function DownsizingPage() {
             <p className="text-xl text-slate-600 mb-8">
               Extract your equity. Embrace low-maintenance living. Start your next chapter.
             </p>
+            <LocalServiceAreaBlurb topic="Downsizing and 55+ community transitions" />
             <a
               href="tel:+17025001942"
               className="inline-flex items-center bg-blue-600 text-white px-8 py-4 rounded-md font-bold text-lg hover:bg-blue-700 transition-colors"
@@ -389,41 +437,12 @@ export default function DownsizingPage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Downsizing FAQs
-            </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "How much can I expect to pocket when downsizing?",
-                  a: "Most downsizers moving from large family homes ($650K-$900K) to 55+ communities or condos ($400K-$550K) walk away with $150,000-$350,000+ in net equity after all costs. Dr. Jan provides a detailed projection based on your specific situation.",
-                },
-                {
-                  q: "What if my home needs repairs before selling?",
-                  a: "Dr. Jan helps you prioritize repairs that matter—and skip those that don't. Often, minor cosmetic updates (paint, landscaping) provide the best ROI. For larger issues, she can connect you with contractors or explore as-is selling options.",
-                },
-                {
-                  q: "How do I choose between 55+ communities?",
-                  a: "Key factors include HOA fees and what they cover, community size and culture, amenities that match your interests, location relative to family/healthcare, and financial stability of the HOA. Dr. Jan tours communities with you and provides unbiased comparisons.",
-                },
-                {
-                  q: "Can I buy before selling my current home?",
-                  a: "Yes, several options exist: bridge loans, HELOCs, or making offers contingent on selling. Dr. Jan works with lenders who specialize in these scenarios and can advise on the best approach for your financial situation.",
-                },
-                {
-                  q: "What about all my stuff?",
-                  a: "Decluttering is part of downsizing. Dr. Jan recommends starting early—months before listing. She can refer you to professional organizers and estate sale companies if needed. Many clients find the process liberating once they start.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-white border border-slate-200 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Downsizing FAQs"
+            subtitle="Equity, repairs, 55+ communities, and timing"
+            faqs={downsizingFaqs}
+          />
 
           {/* Expert Quote */}
           <section className="mb-16 max-w-4xl mx-auto">

@@ -18,11 +18,14 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/listings",
   title: "Las Vegas Homes for Sale | MLS Property Search | Berkshire Hathaway HomeServices",
-  description:
-    "Browse all Las Vegas and Henderson homes for sale with live MLS listings. Search by neighborhood, price, and features. Dr. Jan Duffy, Berkshire Hathaway HomeServices. Call (702) 500-1942.",
+  description: "Browse all Las Vegas and Henderson homes for sale with live MLS listings. Search by neighborhood, price, and features. Dr. Jan Duffy, Berkshire Hathaway HomeServices. Call (702) 500-1942.",
   keywords: [
     "Las Vegas homes for sale",
     "Henderson real estate",
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
     "houses for sale Las Vegas",
     "Berkshire Hathaway listings",
   ],
-};
+});
 
 const listingsSchema = {
   "@context": "https://schema.org",
@@ -49,6 +52,14 @@ const listingsSchema = {
     { "@type": "City", name: "Summerlin, NV" },
   ],
 };
+
+const listingsPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Listings", url: "/listings" },
+  ]),
+  listingsSchema
+);
 
 const popularSearches = [
   { name: "Summerlin Homes", href: "/neighborhoods/summerlin", count: "1,200+" },
@@ -109,10 +120,7 @@ const neighborhoods = [
 export default function ListingsPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsSchema) }}
-      />
+      <SchemaScript id="listings-page-schema" schema={listingsPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

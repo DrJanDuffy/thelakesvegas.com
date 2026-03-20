@@ -22,7 +22,7 @@ export default function HeroSection() {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(intervalId);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, images.length]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -43,8 +43,10 @@ export default function HeroSection() {
               src={src}
               alt={`The Lakes Las Vegas area — Las Vegas real estate hero ${index + 1}`}
               fill
+              sizes="100vw"
               className="object-cover"
               priority={index === 0}
+              quality={index === 0 ? 78 : 70}
             />
             <div className="absolute inset-0 bg-black/40" />
           </div>

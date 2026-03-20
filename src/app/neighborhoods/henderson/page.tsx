@@ -4,11 +4,21 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { Phone, Shield, Users, GraduationCap, TreePine } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateNeighborhoodSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/neighborhoods/henderson",
   title: "Berkshire Hathaway HomeServices Henderson | Nevada Real Estate",
-  description:
-    "Find Henderson homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in Henderson's family-friendly communities. Median price $485K. Call (702) 500-1942.",
+  description: "Find Henderson homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in Henderson's family-friendly communities. Median price $485K. Call (702) 500-1942.",
   keywords: [
     "Berkshire Hathaway HomeServices Henderson",
     "Henderson homes for sale",
@@ -16,70 +26,53 @@ export const metadata: Metadata = {
     "Henderson Nevada",
     "Green Valley Henderson",
   ],
-};
+});
 
-const neighborhoodSchema = {
-  "@context": "https://schema.org",
-  "@type": "Place",
-  name: "Henderson, Nevada",
-  description: "Nevada's second-largest city known for safety, schools, and family-friendly communities",
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: "36.0395",
-    longitude: "-114.9817",
+const hendersonNeighborhoodFaqs = [
+  {
+    question: "What is the current median home price in Henderson?",
+    answer:
+      "As of January 2026, Henderson's median home price is $485,000, up 5.1% from last year. Prices range from $350,000 for condos to over $2 million in luxury communities like MacDonald Highlands.",
   },
-};
+  {
+    question: "How safe is Henderson compared to Las Vegas?",
+    answer:
+      "Henderson consistently ranks as one of America's safest cities. It has been named the safest city in Nevada and frequently appears in national 'Best Places to Live' rankings for its low crime rates and family-friendly environment.",
+  },
+  {
+    question: "What are the best neighborhoods in Henderson?",
+    answer:
+      "Henderson's top neighborhoods include Green Valley (established, mature landscaping), Inspirada (resort-style amenities), MacDonald Highlands (luxury), Anthem (family-oriented), and Lake Las Vegas (waterfront living). Each offers distinct lifestyle options.",
+  },
+  {
+    question: "Why choose Berkshire Hathaway HomeServices for Henderson real estate?",
+    answer:
+      "BHHS Nevada Properties has served Henderson for decades. Our agents like Dr. Jan Duffy know every community, school district, and HOA. The Berkshire Hathaway name provides trust and resources that benefit both buyers and sellers.",
+  },
+];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is the current median home price in Henderson?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "As of January 2026, Henderson's median home price is $485,000, up 5.1% from last year. Prices range from $350,000 for condos to over $2 million in luxury communities like MacDonald Highlands.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How safe is Henderson compared to Las Vegas?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Henderson consistently ranks as one of America's safest cities. It has been named the safest city in Nevada and frequently appears in national 'Best Places to Live' rankings for its low crime rates and family-friendly environment.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What are the best neighborhoods in Henderson?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Henderson's top neighborhoods include Green Valley (established, mature landscaping), Inspirada (resort-style amenities), MacDonald Highlands (luxury), Anthem (family-oriented), and Lake Las Vegas (waterfront living). Each offers distinct lifestyle options.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Why choose Berkshire Hathaway HomeServices for Henderson real estate?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "BHHS Nevada Properties has served Henderson for decades. Our agents like Dr. Jan Duffy know every community, school district, and HOA. The Berkshire Hathaway name provides trust and resources that benefit both buyers and sellers.",
-      },
-    },
-  ],
-};
+const hendersonPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Neighborhoods", url: "/neighborhoods" },
+    { name: "Henderson", url: "/neighborhoods/henderson" },
+  ]),
+  generateNeighborhoodSchema({
+    name: "Henderson",
+    slug: "henderson",
+    description:
+      "Nevada's second-largest city known for safety, schools, and family-friendly communities",
+    latitude: 36.0395,
+    longitude: -114.9817,
+    containedIn: "Henderson",
+  }),
+  generateFAQSchema(hendersonNeighborhoodFaqs)
+);
 
 export default function HendersonPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(neighborhoodSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="neighborhood-henderson-schema" schema={hendersonPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -106,6 +99,7 @@ export default function HendersonPage() {
               Nevada's safest city. Find your Henderson home with Dr. Jan Duffy, your trusted{" "}
               <strong>Berkshire Hathaway HomeServices</strong> Henderson specialist.
             </p>
+            <LocalServiceAreaBlurb topic="Henderson home search and listing strategy" />
           </div>
 
           {/* Market Stats */}
@@ -331,54 +325,12 @@ export default function HendersonPage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Frequently Asked Questions About Henderson Real Estate
-            </h2>
-            <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What is the current median home price in Henderson?
-                </h3>
-                <p className="text-slate-600">
-                  As of January 2026, Henderson's median home price is $485,000, up 5.1% from last year.
-                  Prices range from $350,000 for condos to over $2 million in luxury communities like
-                  MacDonald Highlands.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  How safe is Henderson compared to Las Vegas?
-                </h3>
-                <p className="text-slate-600">
-                  Henderson consistently ranks as one of America's safest cities. It has been named the
-                  safest city in Nevada and frequently appears in national "Best Places to Live" rankings
-                  for its low crime rates and family-friendly environment.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What are the best neighborhoods in Henderson?
-                </h3>
-                <p className="text-slate-600">
-                  Henderson's top neighborhoods include Green Valley (established, mature landscaping),
-                  Inspirada (resort-style amenities), MacDonald Highlands (luxury), Anthem (family-oriented),
-                  and Lake Las Vegas (waterfront living). Each offers distinct lifestyle options.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  Why choose Berkshire Hathaway HomeServices for Henderson real estate?
-                </h3>
-                <p className="text-slate-600">
-                  BHHS Nevada Properties has served Henderson for decades. Our agents like Dr. Jan Duffy
-                  know every community, school district, and HOA. The Berkshire Hathaway name provides
-                  trust and resources that benefit both buyers and sellers.
-                </p>
-              </div>
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Frequently Asked Questions About Henderson Real Estate"
+            subtitle="Safety, neighborhoods, and working with Dr. Jan Duffy"
+            faqs={hendersonNeighborhoodFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

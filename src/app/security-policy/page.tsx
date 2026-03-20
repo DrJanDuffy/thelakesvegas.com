@@ -1,18 +1,56 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { agentInfo, siteConfig } from "@/lib/site-config";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+const siteHost = new URL(siteConfig.url).host;
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/security-policy",
   title: "Security Policy",
-  description: `Security policy and responsible disclosure for ${new URL(siteConfig.url).host}`,
+  description: `Security policy and responsible disclosure for ${siteHost}`,
   robots: {
     index: true,
     follow: true,
   },
-}
+});
+
+const securityPolicyFaqs = [
+  {
+    question: "What does this security policy cover?",
+    answer:
+      "This page describes how we approach security for this website, how to report vulnerabilities responsibly, and what researchers can expect after disclosure. It does not replace MLS disclaimers or brokerage agreements.",
+  },
+  {
+    question: "How do I report a security issue?",
+    answer: `Email ${agentInfo.email} or call (702) 500-1942. Include steps to reproduce, impact, and optional contact details. We aim to acknowledge reports within 48 hours.`,
+  },
+  {
+    question: "Will you take legal action against good-faith research?",
+    answer:
+      "We support coordinated disclosure. Do not access data that isn't yours, avoid service disruption, and give us reasonable time to remediate before public discussion.",
+  },
+];
+
+const securityPolicySchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Security Policy", url: "/security-policy" },
+  ]),
+  generateFAQSchema(securityPolicyFaqs)
+);
 
 export default function SecurityPolicyPage() {
   return (
-    <div className="min-h-screen bg-white py-12">
+    <>
+      <SchemaScript id="security-policy-schema" schema={securityPolicySchemas} />
+      <div className="min-h-screen bg-white py-12">
       <div className="container mx-auto max-w-4xl px-4">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">
           Security Policy
@@ -263,6 +301,13 @@ export default function SecurityPolicyPage() {
             </div>
           </section>
 
+          <FAQSection
+            className="!py-12 bg-gray-50"
+            title="Security policy FAQs"
+            subtitle="Reporting, scope, and responsible disclosure"
+            faqs={securityPolicyFaqs}
+          />
+
           {/* Last Updated */}
           <footer className="border-t pt-6 mt-12">
             <p className="text-sm text-gray-500">
@@ -275,5 +320,6 @@ export default function SecurityPolicyPage() {
         </div>
       </div>
     </div>
-  )
+    </>
+  );
 }

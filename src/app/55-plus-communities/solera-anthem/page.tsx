@@ -15,8 +15,12 @@ import {
   DollarSign,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities/solera-anthem",
   title: "Solera at Anthem Homes for Sale | Intimate Guard-Gated 55+ Henderson | Dr. Jan Duffy",
   description:
     "Solera at Anthem - intimate guard-gated 55+ community in Henderson. Homes from $380K-$650K. Lower HOA fees, close-knit atmosphere. Dr. Jan Duffy, BHHS. Call (702) 500-1942.",
@@ -28,13 +32,12 @@ export const metadata: Metadata = {
     "intimate 55+ community Las Vegas",
     "Berkshire Hathaway Solera Anthem",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "Solera at Anthem - Intimate Guard-Gated 55+ in Henderson",
     description:
       "Close-knit community with guard-gated security. Lower HOA fees, Henderson safety. From $380K. Dr. Jan Duffy, BHHS.",
-    type: "website",
   },
-};
+});
 
 const communitySchema = {
   "@context": "https://schema.org",
@@ -55,13 +58,19 @@ const communitySchema = {
   },
 };
 
+const soleraAnthemPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+    { name: "Solera at Anthem", url: "/55-plus-communities/solera-anthem" },
+  ]),
+  communitySchema
+);
+
 export default function SoleraAnthemPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(communitySchema) }}
-      />
+      <SchemaScript id="solera-anthem-page-schema" schema={soleraAnthemPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

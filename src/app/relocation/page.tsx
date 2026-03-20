@@ -19,11 +19,18 @@ import {
   Globe,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateServiceSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/relocation",
   title: "Relocating to Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Moving to Las Vegas? Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties provides comprehensive relocation services. Schools, neighborhoods, cost of living. Call (702) 500-1942.",
+  description: "Moving to Las Vegas? Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties provides comprehensive relocation services. Schools, neighborhoods, cost of living. Call (702) 500-1942.",
   keywords: [
     "relocating to Las Vegas",
     "moving to Las Vegas",
@@ -34,20 +41,21 @@ export const metadata: Metadata = {
     "moving from California to Nevada",
     "Las Vegas real estate relocation",
   ],
-};
+});
 
-const relocationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Las Vegas Relocation Services",
-  provider: {
-    "@type": "RealEstateAgent",
-    name: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-    telephone: "+17025001942",
-  },
-  areaServed: "Las Vegas, Henderson, Summerlin, Clark County NV",
-  serviceType: "Relocation Services",
-};
+const relocationPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Relocation", url: "/relocation" },
+  ]),
+  generateServiceSchema({
+    name: "Las Vegas Relocation Services",
+    description:
+      "Relocation coordination, neighborhood matching, and home search for moves to Las Vegas, Henderson, and Clark County.",
+    url: "/relocation",
+    areaServed: ["Las Vegas", "Henderson", "Summerlin", "Clark County"],
+  })
+);
 
 const popularRelocationAreas = [
   {
@@ -106,10 +114,7 @@ const relocationServices = [
 export default function RelocationPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(relocationSchema) }}
-      />
+      <SchemaScript id="relocation-page-schema" schema={relocationPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

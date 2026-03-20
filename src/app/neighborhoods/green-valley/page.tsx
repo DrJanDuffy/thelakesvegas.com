@@ -4,11 +4,21 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { Phone, TreePine, ShoppingBag, GraduationCap, MapPin } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateNeighborhoodSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/neighborhoods/green-valley",
   title: "Berkshire Hathaway HomeServices Green Valley | Henderson Real Estate",
-  description:
-    "Find Green Valley homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in Henderson's most established community. Median price $520K. Call (702) 500-1942.",
+  description: "Find Green Valley homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in Henderson's most established community. Median price $520K. Call (702) 500-1942.",
   keywords: [
     "Berkshire Hathaway HomeServices Green Valley",
     "Green Valley homes for sale",
@@ -16,54 +26,53 @@ export const metadata: Metadata = {
     "Green Valley real estate",
     "Green Valley Ranch",
   ],
-};
+});
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is the current median home price in Green Valley?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "As of January 2026, Green Valley's median home price is $520,000, with 4.8% appreciation year-over-year. Prices range from $400,000 for smaller homes to over $1.2 million for luxury properties.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How long do homes stay on the market in Green Valley?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Green Valley homes average 26 days on market. Properties near The District at Green Valley Ranch and those with upgraded features often sell faster, sometimes within the first two weeks.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What makes Green Valley different from newer Henderson communities?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Green Valley, established in 1988, offers what newer communities can't: mature trees, established schools with proven track records, larger lots, and a genuine sense of community built over 35+ years.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is Green Valley a good investment?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Green Valley has shown consistent appreciation due to its prime Henderson location, established infrastructure, and ongoing demand from families seeking top schools and safety. BHHS agents can provide detailed market analysis.",
-      },
-    },
-  ],
-};
+const greenValleyNeighborhoodFaqs = [
+  {
+    question: "What is the current median home price in Green Valley?",
+    answer:
+      "As of January 2026, Green Valley's median home price is $520,000, with 4.8% appreciation year-over-year. Prices range from $400,000 for smaller homes to over $1.2 million for luxury properties.",
+  },
+  {
+    question: "How long do homes stay on the market in Green Valley?",
+    answer:
+      "Green Valley homes average 26 days on market. Properties near The District at Green Valley Ranch and those with upgraded features often sell faster, sometimes within the first two weeks.",
+  },
+  {
+    question: "What makes Green Valley different from newer Henderson communities?",
+    answer:
+      "Green Valley, established in 1988, offers what newer communities can't: mature trees, established schools with proven track records, larger lots, and a genuine sense of community built over 35+ years.",
+  },
+  {
+    question: "Is Green Valley a good investment?",
+    answer:
+      "Green Valley has shown consistent appreciation due to its prime Henderson location, established infrastructure, and ongoing demand from families seeking top schools and safety. BHHS agents can provide detailed market analysis.",
+  },
+];
+
+const greenValleyPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Neighborhoods", url: "/neighborhoods" },
+    { name: "Green Valley", url: "/neighborhoods/green-valley" },
+  ]),
+  generateNeighborhoodSchema({
+    name: "Green Valley",
+    slug: "green-valley",
+    description:
+      "Established Henderson community with mature landscaping, excellent amenities, and strong schools",
+    latitude: 36.0275,
+    longitude: -115.0539,
+    containedIn: "Henderson",
+  }),
+  generateFAQSchema(greenValleyNeighborhoodFaqs)
+);
 
 export default function GreenValleyPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="neighborhood-green-valley-schema" schema={greenValleyPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -90,6 +99,7 @@ export default function GreenValleyPage() {
               Henderson's original master-planned community. Find your Green Valley home with{" "}
               <strong>Berkshire Hathaway HomeServices</strong> and Dr. Jan Duffy.
             </p>
+            <LocalServiceAreaBlurb topic="Green Valley buyer and seller representation" />
           </div>
 
           {/* Market Stats */}
@@ -294,53 +304,12 @@ export default function GreenValleyPage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Frequently Asked Questions About Green Valley Real Estate
-            </h2>
-            <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What is the current median home price in Green Valley?
-                </h3>
-                <p className="text-slate-600">
-                  As of January 2026, Green Valley's median home price is $520,000, with 4.8% appreciation
-                  year-over-year. Prices range from $400,000 for smaller homes to over $1.2 million for
-                  luxury properties.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  How long do homes stay on the market in Green Valley?
-                </h3>
-                <p className="text-slate-600">
-                  Green Valley homes average 26 days on market. Properties near The District at Green Valley
-                  Ranch and those with upgraded features often sell faster, sometimes within the first two weeks.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What makes Green Valley different from newer Henderson communities?
-                </h3>
-                <p className="text-slate-600">
-                  Green Valley, established in 1988, offers what newer communities can't: mature trees,
-                  established schools with proven track records, larger lots, and a genuine sense of
-                  community built over 35+ years.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  Is Green Valley a good investment?
-                </h3>
-                <p className="text-slate-600">
-                  Green Valley has shown consistent appreciation due to its prime Henderson location,
-                  established infrastructure, and ongoing demand from families seeking top schools and
-                  safety. BHHS agents can provide detailed market analysis.
-                </p>
-              </div>
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Frequently Asked Questions About Green Valley Real Estate"
+            subtitle="Pricing, days on market, and Henderson lifestyle"
+            faqs={greenValleyNeighborhoodFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

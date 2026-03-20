@@ -23,9 +23,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { siteUrl } from "@/lib/site-config";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities",
   title:
     "55+ Active Adult Communities Las Vegas | Sun City, Del Webb, Heritage | Dr. Jan Duffy",
   description:
@@ -42,13 +46,12 @@ export const metadata: Metadata = {
     "retirement communities Nevada",
     "55 plus homes Las Vegas",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "Find Your Perfect 55+ Community in Las Vegas | Dr. Jan Duffy",
     description:
       "Sun City, Del Webb, Heritage at Stonebridge & more—Dr. Duffy specializes in active adult living. Berkshire Hathaway HomeServices Nevada Properties.",
-    type: "website",
   },
-};
+});
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -127,6 +130,16 @@ const localBusinessSchema = {
     "Heritage at Stonebridge",
   ],
 };
+
+const fiftyFiveHubPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Services", url: "/services" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+  ]),
+  faqSchema,
+  localBusinessSchema
+);
 
 const communities = [
   {
@@ -326,14 +339,7 @@ const lifestyleBenefits = [
 export default function FiftyFiveCommunitiesPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
+      <SchemaScript id="55-plus-communities-hub-schema" schema={fiftyFiveHubPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

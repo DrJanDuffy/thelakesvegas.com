@@ -18,11 +18,21 @@ import {
   Award,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateServiceSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/sellers",
   title: "Sell Your Las Vegas Home | Berkshire Hathaway HomeServices",
-  description:
-    "Sell your Las Vegas or Henderson home for top dollar with Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Free home valuation. World-class marketing. Call (702) 500-1942.",
+  description: "Sell your Las Vegas or Henderson home for top dollar with Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Free home valuation. World-class marketing. Call (702) 500-1942.",
   keywords: [
     "sell home Las Vegas",
     "Las Vegas listing agent",
@@ -32,20 +42,55 @@ export const metadata: Metadata = {
     "Las Vegas real estate agent",
     "Summerlin home selling",
   ],
-};
+});
 
-const sellerSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Home Selling Services Las Vegas",
-  provider: {
-    "@type": "RealEstateAgent",
-    name: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-    telephone: "+17025001942",
+const sellersHubFaqs = [
+  {
+    question: "How long will it take to sell my Las Vegas home?",
+    answer:
+      "Well-priced Las Vegas homes are selling in an average of 28 days. Luxury homes ($1M+) may take 45+ days. The key is pricing correctly from day one—overpriced homes can sit for months, losing both time and money.",
   },
-  areaServed: "Las Vegas, Henderson, Summerlin, Clark County NV",
-  serviceType: "Seller Representation",
-};
+  {
+    question: "What do I need to do to prepare my home for sale?",
+    answer:
+      "Dr. Jan provides a personalized preparation checklist for every listing. Generally, decluttering, minor repairs, fresh paint, and professional staging consultation yield the highest ROI. She'll walk through your home and identify exactly what improvements will generate the best return.",
+  },
+  {
+    question: "How does Berkshire Hathaway market my home?",
+    answer:
+      "Your home gets professional photography, virtual tours, drone video (when appropriate), MLS syndication to 100+ websites, BHHS global network exposure, social media promotion, and targeted digital advertising. It's the most comprehensive marketing available in Las Vegas real estate.",
+  },
+  {
+    question: "What are your commission rates?",
+    answer:
+      "Commission structures are negotiable and competitive with other full-service brokerages. Dr. Jan offers transparent pricing and will walk you through all costs during your listing consultation. The value of BHHS marketing and negotiation typically results in higher sale prices that more than offset commission.",
+  },
+  {
+    question: "Should I wait for prices to go higher?",
+    answer:
+      "Current appreciation of 4.2% year-over-year suggests prices are stable with gradual increases. Timing the market is difficult—most sellers do better by listing when ready rather than waiting. Dr. Jan can provide a personalized market analysis to help you decide.",
+  },
+  {
+    question: "Do I need to be moved out before listing?",
+    answer:
+      "Not necessarily. Many homes sell while occupied. However, vacant homes are easier to show and stage. Dr. Jan will help you develop a strategy based on your specific situation and timeline.",
+  },
+];
+
+const sellersPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Sellers", url: "/sellers" },
+  ]),
+  generateServiceSchema({
+    name: "Home Selling Services Las Vegas",
+    description:
+      "Listing strategy, marketing, and negotiation for Las Vegas and Henderson sellers with Berkshire Hathaway HomeServices.",
+    url: "/sellers",
+    areaServed: ["Las Vegas", "Henderson", "Summerlin", "North Las Vegas", "Clark County"],
+  }),
+  generateFAQSchema(sellersHubFaqs)
+);
 
 const sellingBenefits = [
   {
@@ -125,10 +170,7 @@ const includedServices = [
 export default function SellersPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(sellerSchema) }}
-      />
+      <SchemaScript id="sellers-page-schema" schema={sellersPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -146,6 +188,7 @@ export default function SellersPage() {
               has been serving Las Vegas since 2008—helping sellers achieve top-dollar results 
               with proven marketing strategies and skilled negotiation.
             </p>
+            <LocalServiceAreaBlurb topic="Las Vegas and Henderson home selling" />
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
               <span className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-1" /> Free Home Valuation</span>
               <span className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-1" /> World-Class Marketing</span>
@@ -372,49 +415,12 @@ export default function SellersPage() {
             </div>
           </section>
 
-          {/* FAQ */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
-              Frequently Asked Questions About Selling in Las Vegas
-            </h2>
-            <p className="text-slate-600 text-center max-w-3xl mx-auto mb-8">
-              Selling your home raises many questions. Here are answers to the most common 
-              concerns from Las Vegas home sellers.
-            </p>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "How long will it take to sell my Las Vegas home?",
-                  a: "Well-priced Las Vegas homes are selling in an average of 28 days. Luxury homes ($1M+) may take 45+ days. The key is pricing correctly from day one—overpriced homes can sit for months, losing both time and money.",
-                },
-                {
-                  q: "What do I need to do to prepare my home for sale?",
-                  a: "Dr. Jan provides a personalized preparation checklist for every listing. Generally, decluttering, minor repairs, fresh paint, and professional staging consultation yield the highest ROI. She'll walk through your home and identify exactly what improvements will generate the best return.",
-                },
-                {
-                  q: "How does Berkshire Hathaway market my home?",
-                  a: "Your home gets professional photography, virtual tours, drone video (when appropriate), MLS syndication to 100+ websites, BHHS global network exposure, social media promotion, and targeted digital advertising. It's the most comprehensive marketing available in Las Vegas real estate.",
-                },
-                {
-                  q: "What are your commission rates?",
-                  a: "Commission structures are negotiable and competitive with other full-service brokerages. Dr. Jan offers transparent pricing and will walk you through all costs during your listing consultation. The value of BHHS marketing and negotiation typically results in higher sale prices that more than offset commission.",
-                },
-                {
-                  q: "Should I wait for prices to go higher?",
-                  a: "Current appreciation of 4.2% year-over-year suggests prices are stable with gradual increases. Timing the market is difficult—most sellers do better by listing when ready rather than waiting. Dr. Jan can provide a personalized market analysis to help you decide.",
-                },
-                {
-                  q: "Do I need to be moved out before listing?",
-                  a: "Not necessarily. Many homes sell while occupied. However, vacant homes are easier to show and stage. Dr. Jan will help you develop a strategy based on your specific situation and timeline.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-slate-50 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Frequently Asked Questions About Selling in Las Vegas"
+            subtitle="Answers to common concerns from Las Vegas home sellers."
+            faqs={sellersHubFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-slate-900 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

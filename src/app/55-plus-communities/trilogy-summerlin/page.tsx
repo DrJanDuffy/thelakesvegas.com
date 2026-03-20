@@ -15,8 +15,12 @@ import {
   Heart,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities/trilogy-summerlin",
   title: "Trilogy at Summerlin Homes for Sale | Luxury Resort 55+ Living | Dr. Jan Duffy",
   description:
     "Trilogy at Summerlin - luxury resort-style 55+ community. Homes from $500K-$1.1M. On-site farm-to-table restaurant, spa, contemporary designs. Dr. Jan Duffy, BHHS. Call (702) 500-1942.",
@@ -28,13 +32,12 @@ export const metadata: Metadata = {
     "Shea Homes Trilogy",
     "Berkshire Hathaway Trilogy Summerlin",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "Trilogy at Summerlin - Luxury Resort 55+ Living",
     description:
       "Where resort living meets 55+ community. Farm-to-table dining, spa, contemporary homes. From $500K. Dr. Jan Duffy, BHHS.",
-    type: "website",
   },
-};
+});
 
 const communitySchema = {
   "@context": "https://schema.org",
@@ -55,13 +58,19 @@ const communitySchema = {
   },
 };
 
+const trilogySummerlinPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+    { name: "Trilogy at Summerlin", url: "/55-plus-communities/trilogy-summerlin" },
+  ]),
+  communitySchema
+);
+
 export default function TrilogySummerlinPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(communitySchema) }}
-      />
+      <SchemaScript id="trilogy-summerlin-page-schema" schema={trilogySummerlinPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

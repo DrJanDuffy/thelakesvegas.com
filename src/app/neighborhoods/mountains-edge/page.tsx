@@ -4,11 +4,16 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { Phone, Mountain, TreePine, DollarSign, Home as HomeIcon } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import { neighborhoodPageGraph } from "@/lib/neighborhood-page-graph";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/neighborhoods/mountains-edge",
   title: "Berkshire Hathaway HomeServices Mountains Edge | Southwest Las Vegas",
-  description:
-    "Find Mountains Edge homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in this southwest Las Vegas community. Median price $475K. Call (702) 500-1942.",
+  description: "Find Mountains Edge homes with Berkshire Hathaway HomeServices Nevada Properties. Dr. Jan Duffy specializes in this southwest Las Vegas community. Median price $475K. Call (702) 500-1942.",
   keywords: [
     "Berkshire Hathaway HomeServices Mountains Edge",
     "Mountains Edge homes for sale",
@@ -16,54 +21,47 @@ export const metadata: Metadata = {
     "southwest Las Vegas homes",
     "affordable Las Vegas",
   ],
-};
+});
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is the current median home price in Mountains Edge?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "As of January 2026, Mountains Edge's median home price is $475,000, up 4.5% year-over-year. Prices range from $380,000 for smaller homes to over $750,000 for larger properties with mountain and Strip views.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What makes Mountains Edge different from other Las Vegas communities?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Mountains Edge offers the largest park in the Las Vegas Valley—the 120-acre Exploration Peak Park with stunning views—plus master-planned amenities at prices below Summerlin or Henderson. It's ideal for buyers seeking value without sacrificing lifestyle.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How is the commute from Mountains Edge?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Mountains Edge provides easy access to I-215 and I-15, making commutes to the Strip (15-20 minutes), airport (20 minutes), and Henderson (25 minutes) straightforward. The southwest location offers multiple route options.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Is new construction available in Mountains Edge?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes, several builders offer new construction in Mountains Edge's expanding areas. BHHS provides free buyer representation on new construction purchases, helping buyers navigate builder contracts and negotiate upgrades.",
-      },
-    },
-  ],
-};
+const mountainsEdgeNeighborhoodFaqs = [
+  {
+    question: "What is the current median home price in Mountains Edge?",
+    answer:
+      "As of January 2026, Mountains Edge's median home price is $475,000, up 4.5% year-over-year. Prices range from $380,000 for smaller homes to over $750,000 for larger properties with mountain and Strip views.",
+  },
+  {
+    question: "What makes Mountains Edge different from other Las Vegas communities?",
+    answer:
+      "Mountains Edge offers the largest park in the Las Vegas Valley—the 120-acre Exploration Peak Park with stunning views—plus master-planned amenities at prices below Summerlin or Henderson. It's ideal for buyers seeking value without sacrificing lifestyle.",
+  },
+  {
+    question: "How is the commute from Mountains Edge?",
+    answer:
+      "Mountains Edge provides easy access to I-215 and I-15, making commutes to the Strip (15-20 minutes), airport (20 minutes), and Henderson (25 minutes) straightforward. The southwest location offers multiple route options.",
+  },
+  {
+    question: "Is new construction available in Mountains Edge?",
+    answer:
+      "Yes, several builders offer new construction in Mountains Edge's expanding areas. BHHS provides free buyer representation on new construction purchases, helping buyers navigate builder contracts and negotiate upgrades.",
+  },
+];
+
+const mountainsEdgePageSchemas = neighborhoodPageGraph({
+  slug: "mountains-edge",
+  name: "Mountains Edge",
+  breadcrumbLabel: "Mountains Edge",
+  description:
+    "Southwest Las Vegas master-planned community with Exploration Peak Park, strong value, and new construction options.",
+  faqs: mountainsEdgeNeighborhoodFaqs,
+  latitude: 35.996,
+  longitude: -115.242,
+  containedIn: "Las Vegas",
+});
 
 export default function MountainsEdgePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="neighborhood-mountains-edge-schema" schema={mountainsEdgePageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -315,55 +313,12 @@ export default function MountainsEdgePage() {
             </div>
           </section>
 
-          {/* FAQ Section */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
-              Frequently Asked Questions About Mountains Edge
-            </h2>
-            <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What is the current median home price in Mountains Edge?
-                </h3>
-                <p className="text-slate-600">
-                  As of January 2026, Mountains Edge's median home price is $475,000, up 4.5%
-                  year-over-year. Prices range from $380,000 for smaller homes to over $750,000
-                  for larger properties with mountain and Strip views.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  What makes Mountains Edge different from other Las Vegas communities?
-                </h3>
-                <p className="text-slate-600">
-                  Mountains Edge offers the largest park in the Las Vegas Valley—the 120-acre
-                  Exploration Peak Park with stunning views—plus master-planned amenities at prices
-                  below Summerlin or Henderson. It's ideal for buyers seeking value without
-                  sacrificing lifestyle.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  How is the commute from Mountains Edge?
-                </h3>
-                <p className="text-slate-600">
-                  Mountains Edge provides easy access to I-215 and I-15, making commutes to the
-                  Strip (15-20 minutes), airport (20 minutes), and Henderson (25 minutes)
-                  straightforward. The southwest location offers multiple route options.
-                </p>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="font-bold text-slate-900 mb-2">
-                  Is new construction available in Mountains Edge?
-                </h3>
-                <p className="text-slate-600">
-                  Yes, several builders offer new construction in Mountains Edge's expanding areas.
-                  BHHS provides free buyer representation on new construction purchases, helping
-                  buyers navigate builder contracts and negotiate upgrades.
-                </p>
-              </div>
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Frequently Asked Questions About Mountains Edge"
+            subtitle="Southwest Las Vegas value, parks, and commutes"
+            faqs={mountainsEdgeNeighborhoodFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

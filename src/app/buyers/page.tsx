@@ -19,11 +19,21 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+  generateServiceSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/buyers",
   title: "Home Buying Guide Las Vegas | Berkshire Hathaway HomeServices",
-  description:
-    "Looking to buy a home in Las Vegas? Dr. Jan Duffy with Berkshire Hathaway HomeServices Nevada Properties guides you through every step. Free buyer consultation. Call (702) 500-1942.",
+  description: "Looking to buy a home in Las Vegas? Dr. Jan Duffy with Berkshire Hathaway HomeServices Nevada Properties guides you through every step. Free buyer consultation. Call (702) 500-1942.",
   keywords: [
     "buy home Las Vegas",
     "Las Vegas home buyer",
@@ -33,20 +43,55 @@ export const metadata: Metadata = {
     "California relocation Las Vegas",
     "55+ communities Las Vegas",
   ],
-};
+});
 
-const buyerSchema = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  name: "Home Buying Services Las Vegas",
-  provider: {
-    "@type": "RealEstateAgent",
-    name: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-    telephone: "+17025001942",
+const buyersHubFaqs = [
+  {
+    question: "How much do I need for a down payment in Las Vegas?",
+    answer:
+      "Down payments vary by loan type: FHA requires 3.5%, conventional loans typically 3-20%, VA loans 0% for eligible veterans, and USDA loans 0% for rural areas. Nevada also offers down payment assistance programs for first-time buyers. Dr. Jan can connect you with lenders who specialize in low down payment programs.",
   },
-  areaServed: "Las Vegas, Henderson, Summerlin, Clark County NV",
-  serviceType: "Buyer Representation",
-};
+  {
+    question: "Should I get pre-approved before looking at homes?",
+    answer:
+      "Yes! Pre-approval shows sellers you're serious and gives you a clear budget. In competitive situations, pre-approved buyers have a significant advantage. The process typically takes 1-3 days with proper documentation.",
+  },
+  {
+    question: "Does BHHS help with new construction purchases?",
+    answer:
+      "Yes! Dr. Jan provides free representation for new construction purchases from builders like Toll Brothers, Lennar, and Century Communities. The builder pays her commission, but she works for you—reviewing contracts, negotiating upgrades, and protecting your interests during the build process.",
+  },
+  {
+    question: "What if I'm relocating from another state?",
+    answer:
+      "Berkshire Hathaway's global network of 50,000+ agents makes relocations seamless. Dr. Jan can coordinate with agents in your current city while helping you find the perfect Las Vegas home remotely through virtual tours and video calls.",
+  },
+  {
+    question: "How competitive is the Las Vegas housing market?",
+    answer:
+      "The Las Vegas market is moderately competitive with 2.1 months of inventory—a slight seller's market. Well-priced homes in desirable areas like Summerlin and Henderson often receive multiple offers within the first week. Having a pre-approval and experienced agent gives you a significant advantage.",
+  },
+  {
+    question: "What are the best neighborhoods for families in Las Vegas?",
+    answer:
+      "Summerlin, Henderson (Green Valley, Inspirada), and Centennial Hills are top choices for families, offering excellent schools, parks, and community amenities. Dr. Jan can match you with the right neighborhood based on your priorities—schools, commute, budget, and lifestyle.",
+  },
+];
+
+const buyersPageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Buyers", url: "/buyers" },
+  ]),
+  generateServiceSchema({
+    name: "Home Buying Services Las Vegas",
+    description:
+      "Buyer representation, MLS access, and negotiation for Las Vegas, Henderson, Summerlin, and Clark County with Berkshire Hathaway HomeServices.",
+    url: "/buyers",
+    areaServed: ["Las Vegas", "Henderson", "Summerlin", "North Las Vegas", "Clark County"],
+  }),
+  generateFAQSchema(buyersHubFaqs)
+);
 
 const buyingSteps = [
   {
@@ -93,10 +138,7 @@ const neighborhoods = [
 export default function BuyersPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buyerSchema) }}
-      />
+      <SchemaScript id="buyers-page-schema" schema={buyersPageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -113,6 +155,7 @@ export default function BuyersPage() {
               you're backed by the most trusted name in real estate—and it costs you nothing.
               The seller pays the commission, but the representation is yours.
             </p>
+            <LocalServiceAreaBlurb topic="Las Vegas and Henderson home buying" />
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
               <span className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-1" /> Free Buyer Representation</span>
               <span className="flex items-center"><CheckCircle className="h-4 w-4 text-green-500 mr-1" /> Full MLS Access</span>
@@ -389,49 +432,12 @@ export default function BuyersPage() {
             </div>
           </section>
 
-          {/* FAQ */}
-          <section className="mb-16 max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
-              Frequently Asked Questions About Buying in Las Vegas
-            </h2>
-            <p className="text-slate-600 text-center max-w-3xl mx-auto mb-8">
-              Get answers to the most common questions from Las Vegas home buyers. If you don't 
-              see your question here, call Dr. Jan Duffy at (702) 500-1942 for a free consultation.
-            </p>
-            <div className="space-y-4">
-              {[
-                {
-                  q: "How much do I need for a down payment in Las Vegas?",
-                  a: "Down payments vary by loan type: FHA requires 3.5%, conventional loans typically 3-20%, VA loans 0% for eligible veterans, and USDA loans 0% for rural areas. Nevada also offers down payment assistance programs for first-time buyers. Dr. Jan can connect you with lenders who specialize in low down payment programs.",
-                },
-                {
-                  q: "Should I get pre-approved before looking at homes?",
-                  a: "Yes! Pre-approval shows sellers you're serious and gives you a clear budget. In competitive situations, pre-approved buyers have a significant advantage. The process typically takes 1-3 days with proper documentation.",
-                },
-                {
-                  q: "Does BHHS help with new construction purchases?",
-                  a: "Yes! Dr. Jan provides free representation for new construction purchases from builders like Toll Brothers, Lennar, and Century Communities. The builder pays her commission, but she works for you—reviewing contracts, negotiating upgrades, and protecting your interests during the build process.",
-                },
-                {
-                  q: "What if I'm relocating from another state?",
-                  a: "Berkshire Hathaway's global network of 50,000+ agents makes relocations seamless. Dr. Jan can coordinate with agents in your current city while helping you find the perfect Las Vegas home remotely through virtual tours and video calls.",
-                },
-                {
-                  q: "How competitive is the Las Vegas housing market?",
-                  a: "The Las Vegas market is moderately competitive with 2.1 months of inventory—a slight seller's market. Well-priced homes in desirable areas like Summerlin and Henderson often receive multiple offers within the first week. Having a pre-approval and experienced agent gives you a significant advantage.",
-                },
-                {
-                  q: "What are the best neighborhoods for families in Las Vegas?",
-                  a: "Summerlin, Henderson (Green Valley, Inspirada), and Centennial Hills are top choices for families, offering excellent schools, parks, and community amenities. Dr. Jan can match you with the right neighborhood based on your priorities—schools, commute, budget, and lifestyle.",
-                },
-              ].map((faq, index) => (
-                <div key={index} className="bg-slate-50 rounded-lg p-6">
-                  <h3 className="font-bold text-slate-900 mb-2">{faq.q}</h3>
-                  <p className="text-slate-600">{faq.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Frequently Asked Questions About Buying in Las Vegas"
+            subtitle="Common questions from Las Vegas home buyers. Call Dr. Jan Duffy at (702) 500-1942 for a free consultation."
+            faqs={buyersHubFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-slate-900 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">

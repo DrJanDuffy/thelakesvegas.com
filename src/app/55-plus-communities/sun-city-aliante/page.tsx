@@ -14,8 +14,12 @@ import {
   TrendingUp,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateBreadcrumbSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/55-plus-communities/sun-city-aliante",
   title: "Sun City Aliante Homes for Sale | Most Affordable Sun City | Dr. Jan Duffy",
   description:
     "Sun City Aliante - the most affordable Sun City in Las Vegas. Homes from $280K-$550K with full amenities. 18-hole golf course, pools, fitness center. Dr. Jan Duffy, BHHS. Call (702) 500-1942.",
@@ -27,13 +31,12 @@ export const metadata: Metadata = {
     "Sun City Aliante HOA fees",
     "Berkshire Hathaway Sun City Aliante",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "Sun City Aliante - Most Affordable Sun City in Las Vegas",
     description:
       "Full amenities at the lowest price point. Golf, pools, fitness, 100+ clubs. From $280K. Dr. Jan Duffy, BHHS Nevada Properties.",
-    type: "website",
   },
-};
+});
 
 const communitySchema = {
   "@context": "https://schema.org",
@@ -54,13 +57,19 @@ const communitySchema = {
   },
 };
 
+const sunCityAliantePageSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "55+ Communities", url: "/55-plus-communities" },
+    { name: "Sun City Aliante", url: "/55-plus-communities/sun-city-aliante" },
+  ]),
+  communitySchema
+);
+
 export default function SunCityAliantePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(communitySchema) }}
-      />
+      <SchemaScript id="sun-city-aliante-page-schema" schema={sunCityAliantePageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">

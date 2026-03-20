@@ -8,8 +8,10 @@ import InstagramProfileEmbed from "@/components/social/InstagramProfileEmbed";
 import Footer from "@/components/layouts/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { Home as HomeIcon, TrendingUp, Shield, Users, Phone } from "lucide-react";
-import { generateFAQSchema } from "@/lib/schema";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas, generateFAQSchema } from "@/lib/schema";
 import { theLakesGeo, theLakesHomeFaqItems } from "@/lib/the-lakes-aeo";
 import {
   agentInfo,
@@ -20,8 +22,7 @@ import {
   theLakesInstagram,
 } from "@/lib/site-config";
 
-const canonical = siteConfig.url.replace(/\/$/, "");
-const baseUrl = canonical;
+const baseUrl = siteConfig.url.replace(/\/$/, "");
 
 /** Event JSON-LD for open house; null when inactive or invalid dates */
 function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
@@ -89,7 +90,8 @@ function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
   };
 }
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/",
   title: "The Lakes Las Vegas Homes for Sale & Real Estate | Dr. Jan Duffy, REALTOR®",
   description: siteConfig.description,
   keywords: [
@@ -103,15 +105,18 @@ export const metadata: Metadata = {
     "Dr. Jan Duffy",
     "BHHS Nevada Properties",
   ],
-  openGraph: {
+  openGraphOverrides: {
     title: "The Lakes Las Vegas Homes for Sale & Real Estate | Dr. Jan Duffy",
     description: siteConfig.description,
-    url: `${canonical}/`,
   },
-};
+});
 
 const faqSchema = generateFAQSchema(theLakesHomeFaqItems);
 const openHouseEventJsonLd = buildOpenHouseEventJsonLd();
+
+const homePageSchema = openHouseEventJsonLd
+  ? combineSchemas(faqSchema, openHouseEventJsonLd)
+  : faqSchema;
 
 export default function Home() {
   const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
@@ -123,16 +128,7 @@ export default function Home() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      {openHouseEventJsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(openHouseEventJsonLd) }}
-        />
-      ) : null}
+      <SchemaScript id="home-page-schema" schema={homePageSchema} />
       <Navbar />
       <main>
         <HeroSection />

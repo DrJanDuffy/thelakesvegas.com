@@ -18,7 +18,9 @@ import {
   Heart,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/site-config";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import { combineSchemas } from "@/lib/schema";
 import {
   businessInfo,
   gbpDescription,
@@ -27,7 +29,8 @@ import {
   generateFAQSchema,
 } from "@/lib/gbp-schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/google-business",
   title: "Dr. Jan Duffy, REALTOR® Las Vegas | Berkshire Hathaway HomeServices",
   description:
     "Dr. Jan Duffy is a trusted Las Vegas REALTOR® with Berkshire Hathaway HomeServices Nevada Properties. Specializing in Summerlin, Henderson, 55+ communities, California relocation, and luxury homes. Call (702) 500-1942.",
@@ -40,28 +43,21 @@ export const metadata: Metadata = {
     "55+ communities Las Vegas",
     "California relocation Las Vegas",
   ],
-  openGraph: {
+  ogImagePath: "/Image/agent1.jpg",
+  openGraphOverrides: {
     title: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-    description: "Trusted Las Vegas REALTOR® serving since 2008. Summerlin, Henderson, luxury homes, 55+ communities.",
-    url: siteUrl("/google-business"),
+    description:
+      "Trusted Las Vegas REALTOR® serving since 2008. Summerlin, Henderson, luxury homes, 55+ communities.",
     type: "profile",
   },
-};
+});
 
 export default function GoogleBusinessPage() {
-  const localBusinessSchema = generateLocalBusinessSchema();
-  const faqSchema = generateFAQSchema();
+  const pageSchemas = combineSchemas(generateLocalBusinessSchema(), generateFAQSchema());
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <SchemaScript id="google-business-schema" schema={pageSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -246,7 +242,7 @@ export default function GoogleBusinessPage() {
               Frequently Asked Questions
             </h2>
             <div className="space-y-4">
-              {gbpFAQs.map((faq, index) => (
+              {gbpFAQs.map((faq: { question: string; answer: string }, index: number) => (
                 <div key={index} className="bg-white border border-slate-200 rounded-lg p-6">
                   <h3 className="font-bold text-slate-900 mb-3 flex items-start gap-2">
                     <MessageSquare className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />

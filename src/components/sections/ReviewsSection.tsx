@@ -149,7 +149,7 @@ export default function ReviewsSection({
               </div>
 
               <div className="relative">
-                <Quote className="absolute -top-2 -left-2 h-8 w-8 text-blue-100" />
+                <Quote className="absolute -top-2 -left-2 h-8 w-8 text-slate-300" aria-hidden />
                 <p className="text-slate-700 relative z-10 pl-4" itemProp="reviewBody">
                   {review.text}
                 </p>

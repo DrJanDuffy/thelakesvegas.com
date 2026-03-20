@@ -4,11 +4,20 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import Link from "next/link";
 import { MapPin, Phone, Home, Users, GraduationCap } from "lucide-react";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/page-metadata";
+import SchemaScript from "@/components/SchemaScript";
+import FAQSection from "@/components/sections/FAQSection";
+import LocalServiceAreaBlurb from "@/components/seo/LocalServiceAreaBlurb";
+import {
+  combineSchemas,
+  generateBreadcrumbSchema,
+  generateFAQSchema,
+} from "@/lib/schema";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/neighborhoods",
   title: "Las Vegas Neighborhoods | Berkshire Hathaway HomeServices",
-  description:
-    "Explore Las Vegas and Henderson neighborhoods with Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Summerlin, Henderson, The Ridges, Southern Highlands & more.",
+  description: "Explore Las Vegas and Henderson neighborhoods with Dr. Jan Duffy at Berkshire Hathaway HomeServices Nevada Properties. Summerlin, Henderson, The Ridges, Southern Highlands & more.",
   keywords: [
     "Las Vegas neighborhoods",
     "Henderson communities",
@@ -16,7 +25,7 @@ export const metadata: Metadata = {
     "best neighborhoods Las Vegas",
     "where to live Las Vegas",
   ],
-};
+});
 
 const neighborhoods = [
   {
@@ -111,14 +120,58 @@ const neighborhoods = [
   },
 ];
 
+const neighborhoodsHubFaqs = [
+  {
+    question: "Which Las Vegas neighborhood is best for families?",
+    answer:
+      "Summerlin, Henderson, Green Valley, Skye Canyon, and Inspirada are popular for schools, parks, and safety. Dr. Jan Duffy matches your commute, budget, and lifestyle to the right community across Clark County.",
+  },
+  {
+    question: "How do I compare Summerlin vs Henderson?",
+    answer:
+      "Summerlin offers master-planned villages and Red Rock proximity; Henderson emphasizes safety ratings and established communities like Green Valley. Median prices and HOA rules differ—Dr. Jan provides side-by-side market context.",
+  },
+  {
+    question: "Does Berkshire Hathaway HomeServices cover all of Clark County?",
+    answer:
+      "Yes. Dr. Jan Duffy with Berkshire Hathaway HomeServices Nevada Properties serves Las Vegas, Henderson, North Las Vegas, Summerlin, The Lakes, and surrounding areas. Call (702) 500-1942 for neighborhood tours.",
+  },
+  {
+    question: "Where can I see homes for sale in these neighborhoods?",
+    answer:
+      "Browse listings on this site and contact Dr. Jan Duffy for MLS-backed search alerts, private showings, and off-market options. License S.0197614.LLC.",
+  },
+  {
+    question: "What is The Lakes in West Las Vegas?",
+    answer:
+      "The Lakes is a water-feature community in West Las Vegas. Dr. Jan highlights how it compares to Summerlin, Centennial Hills, and Henderson for waterfront lifestyle and commute times.",
+  },
+];
+
+const neighborhoodsHubSchemas = combineSchemas(
+  generateBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Neighborhoods", url: "/neighborhoods" },
+  ]),
+  generateFAQSchema(neighborhoodsHubFaqs)
+);
+
 export default function NeighborhoodsPage() {
   return (
     <>
+      <SchemaScript id="neighborhoods-hub-schema" schema={neighborhoodsHubSchemas} />
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero */}
           <div className="max-w-4xl mx-auto text-center mb-16">
+            <nav className="text-sm text-slate-500 mb-6 text-left max-w-4xl mx-auto">
+              <Link href="/" className="hover:text-blue-600">
+                Home
+              </Link>
+              {" / "}
+              <span className="text-slate-900">Neighborhoods</span>
+            </nav>
             <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
               Berkshire Hathaway HomeServices Nevada Properties
             </div>
@@ -129,6 +182,7 @@ export default function NeighborhoodsPage() {
               Explore the best communities in Southern Nevada with Dr. Jan Duffy, your{" "}
               <strong>Berkshire Hathaway HomeServices</strong> neighborhood expert
             </p>
+            <LocalServiceAreaBlurb topic="Neighborhood tours and home search" />
           </div>
 
           {/* Neighborhood Grid */}
@@ -211,6 +265,13 @@ export default function NeighborhoodsPage() {
               </div>
             </div>
           </section>
+
+          <FAQSection
+            className="!py-12 bg-slate-50"
+            title="Neighborhood FAQs"
+            subtitle="Las Vegas, Henderson, and Clark County communities"
+            faqs={neighborhoodsHubFaqs}
+          />
 
           {/* CTA */}
           <section className="text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12 max-w-4xl mx-auto">
