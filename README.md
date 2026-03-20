@@ -50,6 +50,29 @@ vercel --prod            # deploy to production explicitly
 
 Custom environments (Pro+): e.g. `vercel deploy --target=staging`, `vercel pull --environment=staging` — see [custom environments](https://vercel.com/docs/deployments/environments#custom-environments).
 
+### Generated deployment URLs
+
+Each preview or production deployment gets a **unique URL** (until [retention](https://vercel.com/docs/deployments/deployment-retention) expires). URLs are **public by default**; use [deployment protection](https://vercel.com/docs/security/deployment-protection) to restrict access. Full reference: [Accessing Deployments through Generated URLs](https://vercel.com/docs/deployments/generated-urls).
+
+**From Git** (typical for PRs):
+
+| URL type | Pattern (conceptually) | Use |
+|----------|------------------------|-----|
+| **Commit** | `<project>-<hash>-<scope>.vercel.app` | Exact snapshot of that commit; share a fixed build. |
+| **Branch** | `<project>-git-<branch>-<scope>.vercel.app` | Always the **latest** deploy on that branch; good for ongoing review. |
+
+In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as Vercel comments indicate.
+
+**From CLI** — after `vercel` / `vercel --prod`, the printed URL is often `<project>-<scope>.vercel.app` (production deploys resolve there). Teams may also get author-specific host patterns per [docs](https://vercel.com/docs/deployments/generated-urls).
+
+**Other notes**
+
+- Hostnames longer than **63** characters before `.vercel.app` are **truncated**.
+- If the project name looks like a normal domain, Vercel may **shorten** it (anti-phishing).
+- **Pro/Enterprise**: [Preview Deployment Suffix](https://vercel.com/docs/deployments/previews/preview-deployment-suffix) replaces `.vercel.app` with your own domain on previews.
+
+**This repo:** On previews, `getSiteUrl()` prefers `VERCEL_URL` so `sitemap.xml` / `robots.txt` match the deployment you’re viewing. Production should still set `NEXT_PUBLIC_SITE_URL` to `https://www.thelakesvegas.com`.
+
 ## Project layout
 
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
