@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
-import { agentInfo } from "@/lib/site-config";
+import { agentInfo, theLakesInstagram } from "@/lib/site-config";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -27,11 +27,11 @@ export default function Footer() {
                 <Facebook className="h-5 w-5" />
               </a>
               <a
-                href="http://drjanduffy.realscout.com/"
+                href={theLakesInstagram.profileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-white transition-colors"
-                aria-label="Search Las Vegas Homes"
+                aria-label="The Lakes Las Vegas on Instagram (@thelakesinlasvegas)"
               >
                 <Instagram className="h-5 w-5" />
               </a>

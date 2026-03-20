@@ -14,6 +14,7 @@ const csp = [
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
     "https://challenges.cloudflare.com",
+    "https://www.instagram.com",
   ].join(" "),
   [
     "style-src 'self' 'unsafe-inline'",
@@ -34,6 +35,8 @@ const csp = [
     "https://analytics.google.com",
     "https://challenges.cloudflare.com",
     "https://api.followupboss.com",
+    "https://www.instagram.com",
+    "https://graph.instagram.com",
   ].join(" "),
   [
     "frame-src 'self'",
@@ -45,6 +48,8 @@ const csp = [
     "https://maps.google.com",
     "https://*.google.com",
     "https://challenges.cloudflare.com",
+    "https://www.instagram.com",
+    "https://instagram.com",
   ].join(" "),
   "worker-src 'self' blob:",
 ].join("; ");

@@ -49,6 +49,16 @@ export const localSeo = {
   googleReviewsUrl: "https://g.page/r/heyberkshire/review",
 };
 
+/** The Lakes community Instagram (@thelakesinlasvegas) — embed + footer link */
+export const theLakesInstagram = {
+  profileUrl: "https://www.instagram.com/thelakesinlasvegas/",
+  /** Use Instagram’s recommended UTM on the embed permalink */
+  embedPermalink:
+    "https://www.instagram.com/thelakesinlasvegas/?utm_source=ig_embed&utm_campaign=loading",
+  /** Toggle homepage embed without removing code */
+  showEmbedOnHomepage: true,
+};
+
 export const officeInfo = {
   name: "Berkshire Hathaway HomeServices Nevada Properties",
   address: {

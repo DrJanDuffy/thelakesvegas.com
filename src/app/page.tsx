@@ -4,6 +4,7 @@ import RealScoutListings from "@/components/realscout/RealScoutListings";
 import WhyChooseUs from "@/components/sections/WhyChooseUs";
 import ReviewsSection from "@/components/sections/ReviewsSection";
 import FAQSection from "@/components/sections/FAQSection";
+import InstagramProfileEmbed from "@/components/social/InstagramProfileEmbed";
 import Footer from "@/components/layouts/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -16,6 +17,7 @@ import {
   openHouseWeekend,
   siteConfig,
   siteUrl,
+  theLakesInstagram,
 } from "@/lib/site-config";
 
 const canonical = siteConfig.url.replace(/\/$/, "");
@@ -444,6 +446,38 @@ export default function Home() {
 
         <WhyChooseUs />
         <ReviewsSection />
+
+        {theLakesInstagram.showEmbedOnHomepage ? (
+          <section
+            className="py-16 md:py-20 bg-slate-50 border-t border-slate-200"
+            aria-labelledby="instagram-the-lakes-heading"
+          >
+            <div className="container mx-auto px-4">
+              <div className="max-w-3xl mx-auto text-center mb-10">
+                <h2
+                  id="instagram-the-lakes-heading"
+                  className="text-3xl md:text-4xl font-bold text-slate-900 mb-3"
+                >
+                  The Lakes on Instagram
+                </h2>
+                <p className="text-lg text-slate-600">
+                  Photos and updates from{" "}
+                  <a
+                    href={theLakesInstagram.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 font-semibold hover:text-blue-700 underline"
+                  >
+                    @thelakesinlasvegas
+                  </a>
+                  .
+                </p>
+              </div>
+              <InstagramProfileEmbed permalink={theLakesInstagram.embedPermalink} />
+            </div>
+          </section>
+        ) : null}
+
         <FAQSection
           faqs={theLakesHomeFaqItems}
           title="The Lakes Las Vegas — frequently asked questions"
