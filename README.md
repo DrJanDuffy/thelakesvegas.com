@@ -4,20 +4,24 @@ Next.js 15 (App Router) site ported from **heyberkshire.com** (same BHHS / Dr. J
 
 ## Search Console checklist
 
-1. **Deploy** the site on your production domain (e.g. Vercel). Set environment variables:
-   - `NEXT_PUBLIC_SITE_URL` — canonical origin, no trailing slash. **Primary host is `www`** (e.g. `https://www.thelakesvegas.com`).
-   - `GOOGLE_SITE_VERIFICATION` — value from Search Console → *HTML tag* verification (content only).
+Official reference: [Google Search Central — Search Console](https://developers.google.com/search/docs/monitor-debug/search-console-start).
 
-2. **Add property** in [Google Search Console](https://search.google.com/search-console) using the **`www`** URL prefix (e.g. `https://www.thelakesvegas.com/`). Apex `https://thelakesvegas.com/` redirects to `www` via middleware.
+1. **Deploy** the site on your production domain (e.g. Vercel). Set environment variables in **Vercel → Project → Settings → Environment Variables** (Production at minimum):
+   - `NEXT_PUBLIC_SITE_URL` — canonical origin, **no trailing slash**. **Primary host is `www`:** `https://www.thelakesvegas.com`. This drives `metadataBase`, sitemap/robots absolute URLs, and JSON-LD base URLs in [`src/config/site.ts`](src/config/site.ts).
+   - `GOOGLE_SITE_VERIFICATION` — paste **only the `content` value** from Search Console → *HTML tag* verification (not the full `<meta>` tag). Redeploy after saving so [`src/app/layout.tsx`](src/app/layout.tsx) emits the verification meta via Next.js [`metadata.verification.google`](https://nextjs.org/docs/app/api-reference/functions/generate-metadata).
 
-3. **Verify** using the *HTML tag* method. The verification meta tag is emitted from `src/app/layout.tsx` when `GOOGLE_SITE_VERIFICATION` is set.
+2. **Add a property** in [Google Search Console](https://search.google.com/search-console). For this site, a **URL-prefix** property for `https://www.thelakesvegas.com/` matches how the app sets canonicals and metadata. (A **Domain** property for `thelakesvegas.com` is optional and can cover all subdomains; apex still redirects to `www` via [`src/middleware.ts`](src/middleware.ts).)
 
-4. **Submit sitemap**: `https://your-domain/sitemap.xml`  
-   **Robots**: `https://your-domain/robots.txt` (includes the sitemap URL).
+3. **Verify** with the **HTML tag** method after the env var is live on production. Use **URL Inspection** on `https://www.thelakesvegas.com/` to confirm Google can fetch the page.
 
-5. After launch, use **URL Inspection** on the homepage and request indexing if needed.
+4. **Submit the sitemap** in GSC → **Sitemaps**:  
+   `https://www.thelakesvegas.com/sitemap.xml`  
+   Static marketing URLs are listed in [`src/app/sitemap.ts`](src/app/sitemap.ts); `/listings/[id]` URLs are omitted on purpose (IDX).  
+   **Robots:** `https://www.thelakesvegas.com/robots.txt` — from [`src/app/robots.ts`](src/app/robots.ts); allows crawling and references the sitemap; `/api/` is disallowed.
 
-6. **Primary query focus** — On-page copy, metadata, FAQ (visible + `FAQPage` JSON-LD), and `RealEstateAgent` `areaServed` emphasize **The Lakes Las Vegas**. Source of truth for neighborhood FAQs/geo text: `src/lib/the-lakes-aeo.ts`. Re-inspect the homepage in GSC after substantive content changes.
+5. **Post-launch monitoring** — In GSC, watch **Pages** (indexing), **Sitemaps** (success/errors), and **Experience** / **Core Web Vitals** as traffic grows. Use **URL Inspection** on key URLs after large content or template changes.
+
+6. **Primary query focus** — On-page copy, metadata, FAQ (visible + `FAQPage` JSON-LD), and `RealEstateAgent` / `areaServed` emphasize **The Lakes Las Vegas**. Source of truth: [`src/lib/the-lakes-aeo.ts`](src/lib/the-lakes-aeo.ts). Re-inspect important URLs in GSC after substantive SEO edits.
 
 Copy `.env.example` to `.env.local` for local development.
 
