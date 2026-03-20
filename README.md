@@ -29,6 +29,27 @@ npm run dev
 npm run build   # or: vercel build (Vercel CLI)
 ```
 
+## Hosting on Vercel
+
+This app targets **Vercel** as the host: Next.js 15 App Router, middleware (apex → `www`), security headers and CSP in [`next.config.ts`](next.config.ts), and [`@vercel/analytics`](https://vercel.com/docs/analytics) in [`src/app/layout.tsx`](src/app/layout.tsx).
+
+1. **Import the repo** — [vercel.com/new](https://vercel.com/new) → connect **GitHub** → select `DrJanDuffy/thelakesvegas.com`. Set **Production Branch** to `main` (Project → Settings → Git).
+2. **Build settings** — [`vercel.json`](vercel.json) sets `framework: nextjs`, `installCommand` / `buildCommand` so installs and builds match local `npm` + `next build`. [`package.json`](package.json) `engines.node` is `>=20.9.0` (aligned with Next 15 on Vercel).
+3. **Environment variables** — In the Vercel project, add variables from [`.env.example`](.env.example) for **Production** (and **Preview** where you need them). At minimum for the live domain:
+
+   | Variable | Production | Preview |
+   |----------|------------|---------|
+   | `NEXT_PUBLIC_SITE_URL` | `https://www.thelakesvegas.com` (no trailing slash) | Optional — omit to let `getSiteUrl()` use `VERCEL_URL` for correct preview sitemaps |
+   | `GOOGLE_SITE_VERIFICATION` | Search Console HTML-tag value | Optional |
+   | Optional API keys | Redis, FUB, OpenRouter, Anthropic, etc. | Same if you test integrations on previews |
+
+   System variables (`VERCEL`, `VERCEL_URL`, …) are [injected by Vercel](https://vercel.com/docs/projects/environment-variables/system-environment-variables) automatically.
+
+4. **Custom domains** — Add **`www.thelakesvegas.com`** and **`thelakesvegas.com`** under Project → Settings → Domains; point DNS at Vercel per the dashboard. With **Cloudflare**, keep records **DNS only** (gray cloud) so SSL terminates at Vercel and you avoid [proxy conflicts](https://vercel.com/docs/domains/working-with-cloudflare).
+5. **Smoke test after deploy** — `/`, `/robots.txt`, `/sitemap.xml`, and a few key routes; confirm middleware redirects apex → `www` on production.
+
+Local parity: `npx vercel link` then `npx vercel env pull` (see below).
+
 ## Vercel environments
 
 Vercel uses **Local**, **Preview**, and **Production** by default; Pro/Enterprise can add **custom** environments (e.g. staging). Each environment can have its own variables. Official overview: [Environments](https://vercel.com/docs/deployments/environments).
@@ -75,6 +96,7 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 
 ## Project layout
 
+- `vercel.json` — Vercel project defaults: **Next.js** framework, `npm install` + `next build` (see [Project Configuration](https://vercel.com/docs/project-configuration)).
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
 - `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready). **`openHouseWeekend`** drives the homepage open house section + Event JSON-LD; set **`active: false`** after the event (and update dates/embed when you run the next one).
 - `src/lib/the-lakes-aeo.ts` — shared **The Lakes Las Vegas** FAQ copy (homepage FAQ + matching JSON-LD) and geo constants.
