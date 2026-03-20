@@ -60,6 +60,13 @@ realscout-office-listings {
   align-items: center;
   width: 100%;
   padding: 0 1rem;
+  /* Reserve space before web component upgrades (CLS) */
+  min-height: 3.5rem;
+}
+
+/* Hero: pill search bar + shadow — typical rendered height */
+.hero-realscout-slot {
+  min-height: 4.5rem;
 }
 
 /* Mobile Responsive: Tablet */

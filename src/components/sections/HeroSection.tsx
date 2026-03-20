@@ -25,10 +25,12 @@ export default function HeroSection() {
   }, [prefersReducedMotion, images.length]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative min-h-[100dvh] h-screen w-full overflow-hidden">
       {/* Background Images */}
-      <div className="absolute inset-0">
-        {images.map((src, index) => (
+      <div className="absolute inset-0 min-h-[100dvh]" aria-hidden>
+        {images.map((src, index) => {
+          const isLcp = index === 0;
+          return (
           <div
             key={index}
             className={`absolute inset-0 ${
@@ -45,12 +47,15 @@ export default function HeroSection() {
               fill
               sizes="100vw"
               className="object-cover"
-              priority={index === 0}
-              quality={index === 0 ? 78 : 70}
+              priority={isLcp}
+              fetchPriority={isLcp ? "high" : "low"}
+              {...(!isLcp ? { loading: "lazy" as const } : {})}
+              quality={isLcp ? 72 : 68}
             />
             <div className="absolute inset-0 bg-black/40" />
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Content */}
@@ -67,8 +72,8 @@ export default function HeroSection() {
           Hathaway HomeServices Nevada Properties.
         </p>
 
-        {/* RealScout Search Widget */}
-        <div className="realscout-wrapper mb-4">
+        {/* RealScout Search Widget — min-height reserved in globals.css to limit CLS */}
+        <div className="realscout-wrapper hero-realscout-slot mb-4 w-full max-w-2xl">
           <div
             dangerouslySetInnerHTML={{
               __html: `<realscout-simple-search agent-encoded-id="QWdlbnQtMjI1MDUw"></realscout-simple-search>`,

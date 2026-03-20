@@ -91,6 +91,10 @@ export default function RootLayout({
     >
       <head>
         <meta name="color-scheme" content="light" />
+        <link rel="preconnect" href="https://em.realscout.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.realscout.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <link rel="dns-prefetch" href="https://mt.googleapis.com" />
         <SchemaScript schema={siteWideSchemas} id="site-schema" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WB5DLLZ4C6"
@@ -107,7 +111,7 @@ export default function RootLayout({
         <Script
           src="https://em.realscout.com/widgets/realscout-web-components.umd.js"
           type="module"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
