@@ -1,6 +1,13 @@
 # Agent / Cursor context — thelakesvegas.com
 
-Use this file (and [`.cursor/rules/thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc)) so AI-assisted edits stay aligned with this repo.
+Use this file and **Cursor project rules** under [`.cursor/rules/`](.cursor/rules/) so AI-assisted edits stay aligned with this repo.
+
+| Rule file | When it applies |
+|-----------|-----------------|
+| [`thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc) | Always (core stack, IDX, RealScout, CSP, NAP, deploy) |
+| [`next-app-router.mdc`](.cursor/rules/next-app-router.mdc) | When editing `src/app/**` |
+| [`api-route-handlers.mdc`](.cursor/rules/api-route-handlers.mdc) | When editing `src/app/api/**` |
+| [`seo-schema-local.mdc`](.cursor/rules/seo-schema-local.mdc) | When editing `site-config`, `the-lakes-aeo`, or `schema.ts` |
 
 ## Stack
 
@@ -45,4 +52,4 @@ GitHub Actions runs the same lint / type-check / build on `main` — see [`.gith
 
 ## Optional: user-level Cursor rules
 
-Personal preferences (global) can live in Cursor **User Rules**; this repo’s **Project Rules** are under [`.cursor/rules/`](.cursor/rules/).
+Personal preferences (global) can live in Cursor **User Rules**; this repo’s **Project Rules** are the `.mdc` files in [`.cursor/rules/`](.cursor/rules/) (scoped rules attach when you open matching files).

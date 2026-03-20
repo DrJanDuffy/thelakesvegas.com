@@ -1,0 +1,15 @@
+---
+description: Next.js route handlers — API, webhooks (thelakesvegas.com)
+globs:
+  - src/app/api/**/*.ts
+alwaysApply: false
+---
+
+# Route handlers (`src/app/api`)
+
+- Use **`NextRequest` / `NextResponse`** from `next/server`. Match error shapes and status codes used in sibling routes in the same folder.
+- **Secrets:** Read from `process.env` only; never hardcode keys. Do not log tokens, webhook payloads with PII, or full request bodies in production paths.
+- **Optional integrations:** If an env var is missing, follow existing patterns in this repo (clear 503/400 message vs. throwing) — mirror the closest route (e.g. leads, chat, webhooks).
+- **Webhooks:** Verify signatures when the upstream supports it and the route already documents expectations; keep idempotent behavior where applicable.
+- **Validation:** Prefer **Zod** (or existing validation helpers) for JSON bodies when adding new POST handlers.
+- **Rate limiting:** Upstash patterns live in [`src/lib/rate-limit.ts`](src/lib/rate-limit.ts) — reuse rather than ad-hoc counters.

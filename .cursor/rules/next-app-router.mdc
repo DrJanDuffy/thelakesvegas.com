@@ -1,0 +1,17 @@
+---
+description: Next.js 15 App Router — pages, layouts, metadata (thelakesvegas.com)
+globs:
+  - src/app/**/*.tsx
+  - src/app/**/*.ts
+alwaysApply: false
+---
+
+# App Router (this repo)
+
+- **Server components by default.** Add `'use client'` only for interactivity (state, effects, event handlers, browser APIs).
+- **Dynamic routes (Next.js 15):** Type route props with **Promises**, e.g. `params: Promise<{ slug: string }>` and `searchParams: Promise<…>`; **`await`** them in `page.tsx` / `layout.tsx` / `generateMetadata`. See [`src/app/listings/[id]/page.tsx`](src/app/listings/[id]/page.tsx).
+- **Metadata:** Reuse [`siteConfig`](src/lib/site-config.ts) and [`getSiteUrl`](src/config/site.ts) for titles, `metadataBase`, and canonicals. Use localized keywords for **The Lakes Las Vegas** where appropriate.
+- **New marketing pages:** Include a clear **H1**, unique **title/description**, and NAP or link to contact where it fits existing patterns. Add or extend **JSON-LD** via [`@/lib/schema`](src/lib/schema.ts) helpers when other similar pages use schema.
+- **Do not** load **RealScout** or duplicate global **Calendly** / **GA** scripts outside [`layout.tsx`](src/app/layout.tsx) unless there is a deliberate, documented exception.
+- **Images:** Prefer `next/image` for local/static assets. For new **remote** image hosts, add `images.remotePatterns` in [`next.config.ts`](next.config.ts) and allow the host in **CSP `img-src`** if needed.
+- **No Pages Router patterns:** No `getServerSideProps` / `getStaticProps`; use App Router data fetching and route handlers.

@@ -1,0 +1,16 @@
+---
+description: Site config, FAQ/geo copy, JSON-LD — GBP & E-E-A-T alignment
+globs:
+  - src/lib/site-config.ts
+  - src/lib/the-lakes-aeo.ts
+  - src/lib/schema.ts
+alwaysApply: false
+---
+
+# SEO, NAP, and schema
+
+- **Single source of truth:** Business name, phone, email, office address, hours, and URLs in [`site-config.ts`](src/lib/site-config.ts) must match the **Google Business Profile** (and visible footer/header).
+- **FAQ + AEO:** [`the-lakes-aeo.ts`](src/lib/the-lakes-aeo.ts) feeds homepage (and related) FAQ copy and **`FAQPage`** JSON-LD. When you change Q&A text on a page, update **both** visible content and structured data so they stay identical.
+- **Schema:** Extend [`schema.ts`](src/lib/schema.ts) (and related exports) instead of scattering one-off `<script type="application/ld+json">` blocks unless the page already uses a local pattern you are copying.
+- **Agent:** **Dr. Jan Duffy**; license **S.0197614.LLC**; brokerage **Berkshire Hathaway HomeServices Nevada Properties** — verify before changing strings consumers rely on.
+- **Open house / events:** When using `openHouseWeekend` (or similar) in `site-config`, ensure **Event** JSON-LD dates and visible dates match and toggle **`active`** when the event ends.

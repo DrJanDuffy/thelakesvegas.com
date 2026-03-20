@@ -31,8 +31,8 @@ Use the PR template checklist. Request review when working with a team.
 
 This repo includes **Cursor- and agent-oriented** context so AI edits stay on-rails:
 
-- **[`AGENTS.md`](AGENTS.md)** — stack, key file paths, commands that match CI, RealScout/CSP, IDX, NAP/SEO constraints.
-- **[`.cursor/rules/thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc)** — short **project rules** (applied automatically in Cursor when this folder is open).
+- **[`AGENTS.md`](AGENTS.md)** — stack, key file paths, commands that match CI, RealScout/CSP, IDX, NAP/SEO constraints (includes a rule file map).
+- **[`.cursor/rules/*.mdc`](.cursor/rules/)** — **`thelakesvegas.mdc`** (always on) plus scoped rules for **`src/app`**, **`src/app/api`**, and **site-config / FAQ / schema** files.
 - **[`.cursorignore`](.cursorignore)** — skips large/generated dirs (`node_modules`, `.next`, …) for faster, cleaner indexing.
 
 Open the repo root in Cursor; add your own **User Rules** in Cursor Settings for personal preferences that should apply across all projects.
