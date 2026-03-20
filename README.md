@@ -17,7 +17,8 @@ Official reference: [Google Search Central — Search Console](https://developer
 4. **Submit the sitemap** in GSC → **Sitemaps**:  
    `https://www.thelakesvegas.com/sitemap.xml`  
    Static marketing URLs are listed in [`src/app/sitemap.ts`](src/app/sitemap.ts); `/listings/[id]` URLs are omitted on purpose (IDX).  
-   **Robots:** `https://www.thelakesvegas.com/robots.txt` — from [`src/app/robots.ts`](src/app/robots.ts); allows crawling and references the sitemap; `/api/` is disallowed.
+   **Robots:** `https://www.thelakesvegas.com/robots.txt` — from [`src/app/robots.ts`](src/app/robots.ts); allows crawling and references the sitemap; `/api/` is disallowed.  
+   **If GSC shows one error per sitemap row:** open the live `sitemap.xml` and check `<loc>` — every URL must use **`https://www.thelakesvegas.com`**, not `*.vercel.app`. That usually means **`NEXT_PUBLIC_SITE_URL` was missing at build**; set it in Vercel Production and redeploy. [`getSiteUrl()`](src/config/site.ts) also falls back to `siteConfig.url` on Vercel production so sitemaps stay on `www` even if the env var is omitted.
 
 5. **Post-launch monitoring** — In GSC, watch **Pages** (indexing), **Sitemaps** (success/errors), and **Experience** / **Core Web Vitals** as traffic grows. Use **URL Inspection** on key URLs after large content or template changes.
 
