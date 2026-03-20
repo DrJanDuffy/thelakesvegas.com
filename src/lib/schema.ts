@@ -6,6 +6,7 @@
  * @see https://developers.google.com/search/docs/appearance/structured-data
  */
 
+import { theLakesGeo } from "./the-lakes-aeo";
 import { siteConfig, agentInfo, officeInfo, agentStats } from "./site-config";
 
 // ============================================================================
@@ -113,6 +114,24 @@ export function generateRealEstateAgentSchema() {
     },
     areaServed: [
       {
+        "@type": "Place",
+        name: theLakesGeo.nameWithCity,
+        description: theLakesGeo.summary,
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: theLakesGeo.latitude,
+          longitude: theLakesGeo.longitude,
+        },
+        containedInPlace: {
+          "@type": "City",
+          name: "Las Vegas",
+          containedInPlace: {
+            "@type": "State",
+            name: "Nevada",
+          },
+        },
+      },
+      {
         "@type": "City",
         name: "Las Vegas",
         sameAs: "https://en.wikipedia.org/wiki/Las_Vegas",
@@ -177,6 +196,8 @@ export function generateRealEstateAgentSchema() {
       worstRating: "1",
     },
     knowsAbout: [
+      "The Lakes Las Vegas",
+      "West Las Vegas real estate",
       "Las Vegas real estate",
       "Henderson homes",
       "Summerlin properties",
@@ -187,7 +208,8 @@ export function generateRealEstateAgentSchema() {
       "55+ communities",
       "First-time homebuyers",
     ],
-    slogan: "Your Berkshire Hathaway HomeServices expert in Las Vegas",
+    slogan:
+      "The Lakes Las Vegas homes for sale and real estate with Berkshire Hathaway HomeServices",
   };
 }
 
@@ -243,6 +265,7 @@ export function generateWebSiteSchema() {
     "@type": "WebSite",
     "@id": `${BASE_URL}#website`,
     name: siteConfig.name,
+    inLanguage: "en-US",
     url: BASE_URL,
     description: siteConfig.description,
     publisher: {

@@ -17,6 +17,8 @@ Next.js 15 (App Router) site ported from **heyberkshire.com** (same BHHS / Dr. J
 
 5. After launch, use **URL Inspection** on the homepage and request indexing if needed.
 
+6. **Primary query focus** — On-page copy, metadata, FAQ (visible + `FAQPage` JSON-LD), and `RealEstateAgent` `areaServed` emphasize **The Lakes Las Vegas**. Source of truth for neighborhood FAQs/geo text: `src/lib/the-lakes-aeo.ts`. Re-inspect the homepage in GSC after substantive content changes.
+
 Copy `.env.example` to `.env.local` for local development.
 
 ## Commands
@@ -30,7 +32,8 @@ npm run build   # or: vercel build (Vercel CLI)
 ## Project layout
 
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
-- `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready).
+- `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready). **`openHouseWeekend`** drives the homepage open house section + Event JSON-LD; set **`active: false`** after the event (and update dates/embed when you run the next one).
+- `src/lib/the-lakes-aeo.ts` — shared **The Lakes Las Vegas** FAQ copy (homepage FAQ + matching JSON-LD) and geo constants.
 - `src/app/sitemap.ts` / `src/app/robots.ts` — use `getSiteUrl()` from `src/config/site.ts`.
 - `src/app/layout.tsx` — Geist, global JSON-LD, GA, RealScout + Calendly scripts, optional `GOOGLE_SITE_VERIFICATION`.
 - `src/components/` — Navbar, Footer, Hero, RealScout widgets, FAQ, reviews, etc. (from heyberkshire baseline).

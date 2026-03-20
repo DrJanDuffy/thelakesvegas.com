@@ -8,106 +8,269 @@ import Footer from "@/components/layouts/Footer";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Home as HomeIcon, TrendingUp, Shield, Users, Phone } from "lucide-react";
-import { agentInfo, siteConfig } from "@/lib/site-config";
+import { generateFAQSchema } from "@/lib/schema";
+import { theLakesGeo, theLakesHomeFaqItems } from "@/lib/the-lakes-aeo";
+import {
+  agentInfo,
+  officeInfo,
+  openHouseWeekend,
+  siteConfig,
+  siteUrl,
+} from "@/lib/site-config";
 
 const canonical = siteConfig.url.replace(/\/$/, "");
+const baseUrl = canonical;
+
+/** Event JSON-LD for open house; null when inactive or invalid dates */
+function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
+  const c = openHouseWeekend;
+  if (!c.active) return null;
+  const startMs = Date.parse(c.startDate);
+  const endMs = Date.parse(c.endDate);
+  if (Number.isNaN(startMs) || Number.isNaN(endMs) || endMs <= startMs) return null;
+
+  const address: Record<string, unknown> = {
+    "@type": "PostalAddress",
+    addressLocality: c.location.addressLocality,
+    addressRegion: c.location.addressRegion,
+    postalCode: c.location.postalCode,
+    addressCountry: "US",
+  };
+  const street = c.location.streetAddress?.trim();
+  if (street) address.streetAddress = street;
+
+  const placeBlock = {
+    "@type": "Place",
+    name: c.location.name,
+    address,
+  };
+
+  const eventBase = {
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode" as const,
+    eventStatus: "https://schema.org/EventScheduled" as const,
+    location: placeBlock,
+  };
+
+  let subEvent: Record<string, unknown> | undefined;
+  if (c.sundayStartDate && c.sundayEndDate) {
+    const sunStart = Date.parse(c.sundayStartDate);
+    const sunEnd = Date.parse(c.sundayEndDate);
+    if (!Number.isNaN(sunStart) && !Number.isNaN(sunEnd) && sunEnd > sunStart) {
+      subEvent = {
+        "@type": "Event",
+        name: `${c.headline} — Sunday`,
+        description: c.description,
+        startDate: c.sundayStartDate,
+        endDate: c.sundayEndDate,
+        ...eventBase,
+      };
+    }
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: c.headline,
+    description: c.description,
+    startDate: c.startDate,
+    endDate: c.endDate,
+    ...eventBase,
+    ...(subEvent ? { subEvent } : {}),
+    organizer: {
+      "@type": "Person",
+      name: agentInfo.name,
+      telephone: "+1-702-500-1942",
+      email: agentInfo.email,
+      url: siteUrl("/"),
+    },
+    image: `${baseUrl}/Image/hero_bg_1.jpg`,
+  };
+}
 
 export const metadata: Metadata = {
-  title: "The Lakes Las Vegas Homes | Dr. Jan Duffy, REALTOR®",
+  title: "The Lakes Las Vegas Homes for Sale & Real Estate | Dr. Jan Duffy, REALTOR®",
   description: siteConfig.description,
   keywords: [
     "The Lakes Las Vegas",
-    "The Lakes homes for sale",
-    "West Las Vegas real estate",
+    "The Lakes Las Vegas homes for sale",
+    "The Lakes real estate agent",
+    "West Las Vegas lake homes",
+    "89128 homes",
+    "89129 homes",
     "Berkshire Hathaway HomeServices",
     "Dr. Jan Duffy",
     "BHHS Nevada Properties",
   ],
-};
-
-// Organization Schema
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  name: "Dr. Jan Duffy - Berkshire Hathaway HomeServices Nevada Properties",
-  url: canonical,
-  telephone: "+17025001942",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "9406 W Lake Mead Blvd, Suite 100",
-    addressLocality: "Las Vegas",
-    addressRegion: "NV",
-    postalCode: "89134",
-  },
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.9",
-    reviewCount: "200",
+  openGraph: {
+    title: "The Lakes Las Vegas Homes for Sale & Real Estate | Dr. Jan Duffy",
+    description: siteConfig.description,
+    url: `${canonical}/`,
   },
 };
 
-// FAQ Schema for SEO
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Why should I choose a Berkshire Hathaway HomeServices agent in Las Vegas?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Berkshire Hathaway HomeServices is the only real estate brand backed by Warren Buffett's Berkshire Hathaway Inc. This means unmatched financial stability, ethical standards, and a global referral network of 50,000+ agents. When you're making the biggest purchase of your life, that trust matters.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What areas does Berkshire Hathaway HomeServices Nevada Properties serve?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "BHHS Nevada Properties serves all of Las Vegas, Henderson, North Las Vegas, and surrounding areas—including The Lakes, Summerlin, The Ridges, Skye Canyon, Southern Highlands, Green Valley, and Henderson communities.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I contact Dr. Jan Duffy at Berkshire Hathaway HomeServices?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `You can reach Dr. Jan Duffy at (702) 500-1942 or email ${agentInfo.email}. Office located at 9406 W Lake Mead Blvd, Suite 100, Las Vegas, NV 89134.`,
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does Berkshire Hathaway HomeServices help with new construction homes?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes! BHHS agents provide free buyer representation for new construction purchases from builders like Toll Brothers, Lennar, and Century Communities—the builder pays the commission, not you.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What is the current Las Vegas real estate market like in 2026?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "As of January 2026, the Las Vegas median home price is $450,000 (+4.2% YoY), with homes selling in an average of 28 days. Henderson's median is slightly higher at $485,000. The market remains competitive but balanced.",
-      },
-    },
-  ],
-};
+const faqSchema = generateFAQSchema(theLakesHomeFaqItems);
+const openHouseEventJsonLd = buildOpenHouseEventJsonLd();
 
 export default function Home() {
+  const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
+    theLakesGeo.nameWithCity,
+  )}&z=12&output=embed`;
+  const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    theLakesGeo.nameWithCity,
+  )}`;
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      {openHouseEventJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(openHouseEventJsonLd) }}
+        />
+      ) : null}
       <Navbar />
       <main>
         <HeroSection />
+
+        {openHouseWeekend.active ? (
+          <section
+            id="open-house-weekend"
+            className="scroll-mt-24 border-t border-amber-200 bg-gradient-to-b from-amber-50 to-white py-14 md:py-16"
+            aria-labelledby="open-house-heading"
+          >
+            <div className="container mx-auto px-4">
+              <div className="max-w-5xl mx-auto">
+                <h2
+                  id="open-house-heading"
+                  className="text-3xl md:text-4xl font-bold text-slate-900 mb-3"
+                >
+                  {openHouseWeekend.headline}
+                </h2>
+                <p className="text-lg text-slate-700 mb-2">{openHouseWeekend.subhead}</p>
+                {openHouseWeekend.secondSessionNote ? (
+                  <p className="text-slate-600 mb-4">{openHouseWeekend.secondSessionNote}</p>
+                ) : null}
+                <p className="text-slate-700 mb-4">{openHouseWeekend.description}</p>
+                {openHouseWeekend.location.streetAddress?.trim() ? (
+                  <p className="text-slate-800 font-medium mb-2">
+                    {openHouseWeekend.location.name}
+                    <br />
+                    <span className="font-normal text-slate-700">
+                      {openHouseWeekend.location.streetAddress.trim()}
+                      <br />
+                      {openHouseWeekend.location.addressLocality},{" "}
+                      {openHouseWeekend.location.addressRegion}{" "}
+                      {openHouseWeekend.location.postalCode}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-slate-700 mb-4">
+                    <strong className="text-slate-900">Location:</strong> Pin and directions on the
+                    map below ({openHouseWeekend.location.addressLocality},{" "}
+                    {openHouseWeekend.location.addressRegion} {openHouseWeekend.location.postalCode}
+                    ).
+                  </p>
+                )}
+                {openHouseWeekend.mlsAttribution?.trim() ? (
+                  <p className="text-sm text-slate-600 mb-6 border-l-4 border-amber-300 pl-4">
+                    {openHouseWeekend.mlsAttribution.trim()}
+                  </p>
+                ) : null}
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-8">
+                  <a
+                    href={agentInfo.phoneTel}
+                    className="inline-flex justify-center rounded-md bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 transition-colors"
+                  >
+                    Call {agentInfo.phone}
+                  </a>
+                  <a
+                    href={`mailto:${agentInfo.email}?subject=${encodeURIComponent("Open house — The Lakes Las Vegas")}`}
+                    className="inline-flex justify-center rounded-md border-2 border-blue-600 px-5 py-3 font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
+                  >
+                    Email {agentInfo.email}
+                  </a>
+                  {openHouseWeekend.listingUrl?.trim() ? (
+                    <Link
+                      href={openHouseWeekend.listingUrl.trim()}
+                      className="inline-flex justify-center rounded-md border-2 border-slate-300 px-5 py-3 font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
+                    >
+                      View listing
+                    </Link>
+                  ) : null}
+                </div>
+                <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white min-h-[280px]">
+                  <iframe
+                    title="Open house weekend — map and directions (The Lakes Las Vegas area)"
+                    src={openHouseWeekend.mapEmbedSrc}
+                    className="w-full h-[320px] md:h-[480px] border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {/* GEO: explicit locality + map for Search Console / local relevance */}
+        <section
+          id="geography-the-lakes"
+          className="scroll-mt-24 bg-slate-50 py-16 md:py-20 border-t border-slate-200"
+          aria-labelledby="geo-the-lakes-heading"
+        >
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto grid gap-10 lg:grid-cols-2 lg:items-start">
+              <div>
+                <h2
+                  id="geo-the-lakes-heading"
+                  className="text-3xl md:text-4xl font-bold text-slate-900 mb-4"
+                >
+                  The Lakes Las Vegas — location &amp; community
+                </h2>
+                <p className="text-lg text-slate-700 leading-relaxed mb-4">{theLakesGeo.summary}</p>
+                <p className="text-slate-600 mb-6">
+                  <strong className="text-slate-800">Area:</strong> {theLakesGeo.name},{" "}
+                  {theLakesGeo.county}, {theLakesGeo.region} ·{" "}
+                  <strong className="text-slate-800">Common ZIPs:</strong>{" "}
+                  {theLakesGeo.postalCodes.join(", ")} (verify on each listing).
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={mapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex justify-center rounded-md bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 transition-colors"
+                  >
+                    Open in Google Maps
+                  </a>
+                  <a
+                    href={agentInfo.phoneTel}
+                    className="inline-flex justify-center rounded-md border-2 border-blue-600 px-5 py-3 font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
+                  >
+                    Call {agentInfo.phone}
+                  </a>
+                </div>
+                <p className="mt-6 text-sm text-slate-500">
+                  {officeInfo.name} · {officeInfo.address.full}
+                </p>
+              </div>
+              <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white min-h-[280px]">
+                <iframe
+                  title="Map of The Lakes Las Vegas, Nevada"
+                  src={mapEmbedSrc}
+                  className="w-full h-[320px] md:h-[380px] border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Berkshire Hathaway Value Proposition Section */}
         <section className="py-16 md:py-20 bg-white">
@@ -231,29 +394,42 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
-              {[
-                { name: "Summerlin", price: "$625K", slug: "summerlin" },
-                { name: "Henderson", price: "$485K", slug: "henderson" },
-                { name: "Green Valley", price: "$520K", slug: "green-valley" },
-                { name: "The Ridges", price: "$2.5M", slug: "the-ridges" },
-                { name: "Southern Highlands", price: "$750K", slug: "southern-highlands" },
-                { name: "North Las Vegas", price: "$385K", slug: "north-las-vegas" },
-                { name: "Skye Canyon", price: "$550K", slug: "skye-canyon" },
-                { name: "Centennial Hills", price: "$495K", slug: "centennial-hills" },
-                { name: "Inspirada", price: "$525K", slug: "inspirada" },
-                { name: "Mountains Edge", price: "$475K", slug: "mountains-edge" },
-              ].map((area) => (
+              {(
+                [
+                  {
+                    name: "The Lakes Las Vegas",
+                    price: "West Las Vegas",
+                    href: "/#geography-the-lakes",
+                  },
+                  { name: "Summerlin", price: "$625K", slug: "summerlin" },
+                  { name: "Henderson", price: "$485K", slug: "henderson" },
+                  { name: "Green Valley", price: "$520K", slug: "green-valley" },
+                  { name: "The Ridges", price: "$2.5M", slug: "the-ridges" },
+                  { name: "Southern Highlands", price: "$750K", slug: "southern-highlands" },
+                  { name: "North Las Vegas", price: "$385K", slug: "north-las-vegas" },
+                  { name: "Skye Canyon", price: "$550K", slug: "skye-canyon" },
+                  { name: "Centennial Hills", price: "$495K", slug: "centennial-hills" },
+                  { name: "Inspirada", price: "$525K", slug: "inspirada" },
+                  { name: "Mountains Edge", price: "$475K", slug: "mountains-edge" },
+                ] as const
+              ).map((area) => {
+                const href =
+                  "href" in area ? area.href : `/neighborhoods/${area.slug}`;
+                return (
                 <Link
-                  key={area.slug}
-                  href={`/neighborhoods/${area.slug}`}
+                  key={"href" in area ? area.href : area.slug}
+                  href={href}
                   className="bg-slate-50 hover:bg-blue-50 rounded-lg p-4 text-center transition-colors group"
                 >
                   <h3 className="font-semibold text-slate-900 group-hover:text-blue-600">
                     {area.name}
                   </h3>
-                  <p className="text-sm text-slate-500">From {area.price}</p>
+                  <p className="text-sm text-slate-500">
+                    {"href" in area ? area.price : `From ${area.price}`}
+                  </p>
                 </Link>
-              ))}
+              );
+              })}
             </div>
             <div className="text-center mt-8">
               <Link
@@ -268,7 +444,11 @@ export default function Home() {
 
         <WhyChooseUs />
         <ReviewsSection />
-        <FAQSection />
+        <FAQSection
+          faqs={theLakesHomeFaqItems}
+          title="The Lakes Las Vegas — frequently asked questions"
+          subtitle="Direct answers about the neighborhood, ZIP codes, buying and selling, and how to reach Dr. Jan Duffy (for search and AI summaries)."
+        />
 
         {/* CTA Section */}
         <section className="py-16 md:py-20 bg-blue-600 text-white">

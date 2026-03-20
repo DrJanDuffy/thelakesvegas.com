@@ -11,7 +11,7 @@ export const siteConfig = {
   shortName: "BHHS",
   url: "https://www.thelakesvegas.com",
   description:
-    "Homes and real estate in The Lakes, Las Vegas—lake lifestyle near Summerlin. Buy or sell with Dr. Jan Duffy, Berkshire Hathaway HomeServices Nevada Properties.",
+    "The Lakes Las Vegas homes for sale & real estate. Dr. Jan Duffy, BHHS Nevada Properties—west Las Vegas lake community near Summerlin. Call (702) 500-1942.",
 };
 
 export const agentInfo = {
@@ -64,6 +64,60 @@ export const officeInfo = {
   },
   phone: "(702) 500-1942",
   phoneTel: "tel:+17025001942",
+};
+
+/** Homepage open house block + Event JSON-LD. Set active: false after the weekend. */
+export interface OpenHouseLocation {
+  name: string;
+  streetAddress: string;
+  addressLocality: string;
+  addressRegion: string;
+  postalCode: string;
+}
+
+export interface OpenHouseWeekendConfig {
+  active: boolean;
+  headline: string;
+  subhead: string;
+  /** Used for Event schema description */
+  description: string;
+  /** ISO 8601 with offset, e.g. 2026-03-21T12:00:00-07:00 */
+  startDate: string;
+  endDate: string;
+  /** Optional second session (e.g. Sunday); emitted as Event subEvent when valid */
+  sundayStartDate?: string;
+  sundayEndDate?: string;
+  /** Extra line for a second day/time (visible copy; schema uses start/end above) */
+  secondSessionNote?: string;
+  location: OpenHouseLocation;
+  mapEmbedSrc: string;
+  listingUrl?: string;
+  /** MLS listing attribution (visible only when non-empty) */
+  mlsAttribution?: string;
+}
+
+export const openHouseWeekend: OpenHouseWeekendConfig = {
+  active: true,
+  headline: "Open house this weekend — The Lakes Las Vegas",
+  subhead:
+    "Saturday & Sunday, March 21–22, 2026 · 12:00 PM – 3:00 PM (Pacific) each day",
+  description:
+    "Weekend open house in The Lakes, Las Vegas. View the map for the pin location; call Dr. Jan Duffy with questions or to schedule a private showing.",
+  startDate: "2026-03-21T12:00:00-07:00",
+  endDate: "2026-03-21T15:00:00-07:00",
+  sundayStartDate: "2026-03-22T12:00:00-07:00",
+  sundayEndDate: "2026-03-22T15:00:00-07:00",
+  location: {
+    name: "Open house — The Lakes, Las Vegas",
+    streetAddress: "",
+    addressLocality: "Las Vegas",
+    addressRegion: "NV",
+    postalCode: "89128",
+  },
+  mapEmbedSrc:
+    "https://www.google.com/maps/d/embed?mid=1b94nsahE3WHPXPCBciaB2wU0BPEsMhc&hl=en&ehbc=2E312F",
+  listingUrl: undefined,
+  mlsAttribution: "",
 };
 
 // Market Statistics (Updated January 2026)

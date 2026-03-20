@@ -41,7 +41,7 @@ export default function HeroSection() {
           >
             <Image
               src={src}
-              alt={`Hero image ${index + 1}`}
+              alt={`The Lakes Las Vegas area — Las Vegas real estate hero ${index + 1}`}
               fill
               className="object-cover"
               priority={index === 0}
@@ -54,13 +54,15 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 text-center">
         <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-          Homes in
+          <span className="text-white">The Lakes Las Vegas</span>
           <br />
-          <span className="text-blue-400">The Lakes, Las Vegas</span>
+          <span className="text-blue-400 text-2xl md:text-3xl lg:text-5xl font-semibold">
+            Homes for sale &amp; real estate
+          </span>
         </h1>
         <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
-          Lakefront lifestyle near Summerlin—buy or sell with Dr. Jan Duffy, Berkshire Hathaway
-          HomeServices Nevada Properties.
+          West Las Vegas lake community near Summerlin—buy or sell with Dr. Jan Duffy, Berkshire
+          Hathaway HomeServices Nevada Properties.
         </p>
 
         {/* RealScout Search Widget */}
