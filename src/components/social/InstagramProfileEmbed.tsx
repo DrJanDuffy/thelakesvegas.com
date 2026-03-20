@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -13,6 +13,8 @@ type InstagramProfileEmbedProps = {
   /** Full permalink URL (Instagram recommends utm_source=ig_embed for profiles) */
   permalink: string;
   className?: string;
+  /** If true, load embed.js and iframe only after user interaction (fewer third-party cookies on load). */
+  embedClickToLoad?: boolean;
 };
 
 /**
@@ -22,10 +24,46 @@ type InstagramProfileEmbedProps = {
 export default function InstagramProfileEmbed({
   permalink,
   className = "",
+  embedClickToLoad = false,
 }: InstagramProfileEmbedProps) {
+  const [loaded, setLoaded] = useState(!embedClickToLoad);
+
   useEffect(() => {
+    if (!loaded) return;
     window.instgrm?.Embeds?.process();
-  }, [permalink]);
+  }, [permalink, loaded]);
+
+  if (!loaded) {
+    return (
+      <div
+        className={`mx-auto max-w-[540px] rounded-lg border border-slate-200 bg-slate-50 p-8 text-center shadow-sm ${className}`}
+      >
+        <p className="mb-4 text-sm text-slate-600">
+          Load the Instagram widget to see @thelakesinlasvegas here. Third-party cookies may apply
+          after you load it.
+        </p>
+        <button
+          type="button"
+          onClick={() => setLoaded(true)}
+          className="rounded-md bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 text-sm font-semibold text-white shadow hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
+        >
+          Load Instagram feed
+        </button>
+        <p className="mt-4 text-xs text-slate-500">
+          Or{" "}
+          <a
+            href={permalink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-blue-600 underline hover:text-blue-700"
+          >
+            open the profile on Instagram
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={className}>

@@ -515,7 +515,10 @@ export default function Home() {
                   .
                 </p>
               </div>
-              <InstagramProfileEmbed permalink={theLakesInstagram.embedPermalink} />
+              <InstagramProfileEmbed
+                permalink={theLakesInstagram.embedPermalink}
+                embedClickToLoad={theLakesInstagram.embedClickToLoad}
+              />
             </div>
           </section>
         ) : null}

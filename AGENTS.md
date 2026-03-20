@@ -35,7 +35,7 @@ GitHub Actions runs the same lint / type-check / build on `main` — see [`.gith
 | Canonical URL helper | [`src/config/site.ts`](src/config/site.ts) — `getSiteUrl()` uses `VERCEL_URL` only when `VERCEL_ENV` is **`preview`**; otherwise `siteConfig.url` (`www`) so production sitemap matches GSC |
 | Sitemap / robots (GSC) | [`src/app/sitemap.ts`](src/app/sitemap.ts), [`src/app/robots.ts`](src/app/robots.ts) — submit `https://www.thelakesvegas.com/sitemap.xml` in Search Console |
 | Global layout, scripts (RealScout, analytics, verification meta) | [`src/app/layout.tsx`](src/app/layout.tsx) — `GOOGLE_SITE_VERIFICATION` env → `metadata.verification.google` |
-| CSP / security headers | [`next.config.ts`](next.config.ts) |
+| CSP / security headers | [`next.config.ts`](next.config.ts) — includes `fonts.googleapis.com` / `fonts.gstatic.com` for RealScout’s Google Fonts |
 | Apex → `www` redirect | [`src/middleware.ts`](src/middleware.ts) |
 
 ## Hard constraints

@@ -69,6 +69,11 @@ export const theLakesInstagram = {
     "https://www.instagram.com/thelakesinlasvegas/?utm_source=ig_embed&utm_campaign=loading",
   /** Homepage: after primary CTA, before “Last updated” / footer (keeps FAQ→convert flow intact) */
   showEmbedOnHomepage: true,
+  /**
+   * When true, the feed loads only after the user clicks “Load Instagram feed” — fewer third-party
+   * cookies on initial load (Lighthouse / privacy). Set false to auto-load embed.js on the page.
+   */
+  embedClickToLoad: true,
 };
 
 export const officeInfo = {

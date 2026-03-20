@@ -26,6 +26,13 @@ Official reference: [Google Search Central — Search Console](https://developer
 
 Copy `.env.example` to `.env.local` for local development.
 
+## Lighthouse / CSP and third-party embeds
+
+- **Content Security Policy** lives in [`next.config.ts`](next.config.ts). **RealScout** pulls **Google Fonts** (`fonts.googleapis.com` CSS + `fonts.gstatic.com` font files); both are allowlisted so the widget does not trip `style-src` / `font-src` in DevTools. After deploy, open a page with RealScout (e.g. `/listings`) and confirm the console has **no** CSP error for `fonts.googleapis.com`.
+- **Instagram** on the homepage uses **click-to-load** when [`theLakesInstagram.embedClickToLoad`](src/lib/site-config.ts) is `true` ([`InstagramProfileEmbed.tsx`](src/components/social/InstagramProfileEmbed.tsx)) so third-party cookies and `embed.js` load only after the user opts in. Set `embedClickToLoad: false` for immediate embed (worse for cookie audits).
+- **Google Maps** iframes ([`contact/page.tsx`](src/app/contact/page.tsx), [`page.tsx`](src/app/page.tsx), optional My Maps in `openHouseWeekend`) load Google’s viewer (`gstatic.com` / `gmeviewer`). Lighthouse may report **deprecated `unload` listeners** — that code is **Google’s**, not ours. To remove it from audits, replace the iframe with a **static map image** + “Open in Google Maps” link (e.g. Maps Static API or a hosted screenshot).
+- **COOP / Trusted Types:** not enabled here; strict policies often break Calendly, Instagram, Maps, and RealScout without a dedicated hardening pass.
+
 ## Cursor / AI-assisted coding
 
 - **[`AGENTS.md`](AGENTS.md)** — project context for tools and collaborators (stack, critical paths, CI commands, IDX/RealScout/NAP guardrails).

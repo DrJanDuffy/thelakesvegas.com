@@ -21,9 +21,14 @@ const csp = [
     "https://em.realscout.com",
     "https://www.realscout.com",
     "https://assets.calendly.com",
+    "https://fonts.googleapis.com",
   ].join(" "),
   "img-src 'self' data: blob: https: http:",
-  "font-src 'self' data: https://assets.calendly.com",
+  [
+    "font-src 'self' data:",
+    "https://assets.calendly.com",
+    "https://fonts.gstatic.com",
+  ].join(" "),
   [
     "connect-src 'self'",
     "https://em.realscout.com",
