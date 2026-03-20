@@ -29,6 +29,27 @@ npm run dev
 npm run build   # or: vercel build (Vercel CLI)
 ```
 
+## Vercel environments
+
+Vercel uses **Local**, **Preview**, and **Production** by default; Pro/Enterprise can add **custom** environments (e.g. staging). Each environment can have its own variables. Official overview: [Environments](https://vercel.com/docs/deployments/environments).
+
+| Environment | When | This repo |
+|-------------|------|-----------|
+| **Local** | Develop on your machine | Copy `.env.example` → `.env.local`, or after `vercel link`: `vercel env pull` to sync dashboard vars into `.env.local`. |
+| **Preview** | Push a non-`main` branch, open a PR, or `vercel` (no `--prod`) | `getSiteUrl()` in `src/config/site.ts` uses `VERCEL_URL` so sitemap/robots match the preview host. |
+| **Production** | Merge to `main` or `vercel --prod` | Set **`NEXT_PUBLIC_SITE_URL=https://www.thelakesvegas.com`** (no trailing slash) so canonical URLs stay `www` even if Vercel’s assigned URL differs. |
+
+**CLI quick reference**
+
+```bash
+npm i -g vercel          # or: npx vercel
+vercel link              # attach this directory to a Vercel project
+vercel env pull          # write Production envs to .env.local (use flags for other envs if needed)
+vercel --prod            # deploy to production explicitly
+```
+
+Custom environments (Pro+): e.g. `vercel deploy --target=staging`, `vercel pull --environment=staging` — see [custom environments](https://vercel.com/docs/deployments/environments#custom-environments).
+
 ## Project layout
 
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
