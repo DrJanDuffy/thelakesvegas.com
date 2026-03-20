@@ -27,6 +27,16 @@ Write clear messages (what + why). Optional prefix style used elsewhere in this 
 
 Use the PR template checklist. Request review when working with a team.
 
+## Coding in Cursor
+
+This repo includes **Cursor- and agent-oriented** context so AI edits stay on-rails:
+
+- **[`AGENTS.md`](AGENTS.md)** — stack, key file paths, commands that match CI, RealScout/CSP, IDX, NAP/SEO constraints.
+- **[`.cursor/rules/thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc)** — short **project rules** (applied automatically in Cursor when this folder is open).
+- **[`.cursorignore`](.cursorignore)** — skips large/generated dirs (`node_modules`, `.next`, …) for faster, cleaner indexing.
+
+Open the repo root in Cursor; add your own **User Rules** in Cursor Settings for personal preferences that should apply across all projects.
+
 ## More context
 
 - [README — Hosting on Vercel](README.md#hosting-on-vercel)

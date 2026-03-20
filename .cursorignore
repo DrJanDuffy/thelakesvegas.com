@@ -1,0 +1,7 @@
+# Lean Cursor indexing (mirrors heavy dirs in .gitignore)
+node_modules/
+.next/
+out/
+.vercel/
+coverage/
+*.tsbuildinfo

@@ -21,6 +21,12 @@ Next.js 15 (App Router) site ported from **heyberkshire.com** (same BHHS / Dr. J
 
 Copy `.env.example` to `.env.local` for local development.
 
+## Cursor / AI-assisted coding
+
+- **[`AGENTS.md`](AGENTS.md)** — project context for tools and collaborators (stack, critical paths, CI commands, IDX/RealScout/NAP guardrails).
+- **[`.cursor/rules/thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc)** — Cursor **project rules** (auto-applied in this workspace).
+- See also **[CONTRIBUTING.md — Coding in Cursor](CONTRIBUTING.md#coding-in-cursor)**.
+
 ## Version control (Git)
 
 - **Remote:** [github.com/DrJanDuffy/thelakesvegas.com](https://github.com/DrJanDuffy/thelakesvegas.com) — default branch **`main`** (production deploys on Vercel use this branch once the project is linked).
@@ -121,6 +127,7 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 - [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — CI: ESLint, TypeScript, production build.
 - [`.github/dependabot.yml`](.github/dependabot.yml) — weekly npm + monthly GitHub Actions dependency PRs.
 - [SECURITY.md](SECURITY.md) — how to report security issues; secrets hygiene.
+- [`AGENTS.md`](AGENTS.md), [`.cursor/rules/thelakesvegas.mdc`](.cursor/rules/thelakesvegas.mdc), [`.cursorignore`](.cursorignore) — Cursor / agent context and lean indexing.
 - `vercel.json` — Vercel project defaults: **Next.js** framework, `npm install` + `next build` (see [Project Configuration](https://vercel.com/docs/project-configuration)).
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
 - `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready). **`openHouseWeekend`** drives the homepage open house section + Event JSON-LD; set **`active: false`** after the event (and update dates/embed when you run the next one).
