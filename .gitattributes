@@ -1,0 +1,12 @@
+# Normalize line endings for cross-platform Git (Windows/macOS/Linux)
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary

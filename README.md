@@ -21,6 +21,22 @@ Next.js 15 (App Router) site ported from **heyberkshire.com** (same BHHS / Dr. J
 
 Copy `.env.example` to `.env.local` for local development.
 
+## Version control (Git)
+
+- **Remote:** [github.com/DrJanDuffy/thelakesvegas.com](https://github.com/DrJanDuffy/thelakesvegas.com) — default branch **`main`** (production deploys on Vercel use this branch once the project is linked).
+- **Workflow:** short-lived **feature branches** → **pull request** → merge to `main`. Previews deploy from non-`main` branches when Vercel Git integration is enabled.
+- **Ignored / never commit:** `.env`, `.env*.local`, `.vercel/`, `node_modules/`, `.next/` — see [`.gitignore`](.gitignore). Secrets belong in Vercel **Environment Variables** or local `.env.local` only.
+- **Line endings:** [`.gitattributes`](.gitattributes) sets `text=auto` and `eol=lf` for text files to reduce noisy diffs across Windows and macOS.
+- **Contributors:** see [CONTRIBUTING.md](CONTRIBUTING.md) and the [PR template](.github/pull_request_template.md).
+
+```bash
+git status
+git pull origin main
+git checkout -b feat/your-change
+# … edit, then …
+git add -A && git commit -m "feat: describe change" && git push -u origin feat/your-change
+```
+
 ## Commands
 
 ```bash
@@ -96,6 +112,8 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 
 ## Project layout
 
+- [`.gitattributes`](.gitattributes) — Git EOL normalization for cross-platform clones.
+- [CONTRIBUTING.md](CONTRIBUTING.md) — branch/PR workflow; [`.github/pull_request_template.md`](.github/pull_request_template.md) — merge checklist.
 - `vercel.json` — Vercel project defaults: **Next.js** framework, `npm install` + `next build` (see [Project Configuration](https://vercel.com/docs/project-configuration)).
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
 - `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready). **`openHouseWeekend`** drives the homepage open house section + Event JSON-LD; set **`active: false`** after the event (and update dates/embed when you run the next one).
