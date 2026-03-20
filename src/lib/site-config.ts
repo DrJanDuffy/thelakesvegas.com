@@ -22,7 +22,7 @@ export const agentInfo = {
   phoneFormatted: "(702) 500-1942",
   phoneTel: "tel:+17025001942",
   /** Keep aligned with GBP / working inbox */
-  email: "homes@heyberkshire.com",
+  email: "DrDuffy@thelakesvegas.com",
   brokerage: "Berkshire Hathaway HomeServices Nevada Properties",
 };
 
