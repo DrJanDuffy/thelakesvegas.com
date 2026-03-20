@@ -34,3 +34,40 @@ npm run build   # or: vercel build (Vercel CLI)
 - `src/app/robots.ts` — allows crawlers and points to the sitemap.
 - `src/config/site.ts` — resolves canonical base URL from env (default `https://www.thelakesvegas.com`).
 - `src/app/layout.tsx` — `metadataBase`, default SEO fields, optional Google verification.
+
+## Vercel audit: `git push` not deploying
+
+**What was checked**
+
+| Check | Result |
+|--------|--------|
+| Git remote | `origin` → `https://github.com/DrJanDuffy/thelakesvegas.com.git`, branch `main` |
+| Local Vercel link | No `.vercel/project.json` (project not linked via CLI in this clone) |
+| GitHub Actions | No `.github/workflows/*` (no CI deploy fallback) |
+| Vercel CLI (`vercel whoami` / `vercel project ls`) | Logged in as **drjanduffy**, team **janet-duffys-projects** — **no project** whose name/URL matches *thelakes* / *thelakesvegas* in listed pages (this repo was never imported there, or it uses a non-obvious name) |
+
+**Most likely cause:** There is **no Vercel project** connected to `DrJanDuffy/thelakesvegas.com`. Pushes do not deploy until you **import** the GitHub repo under the Vercel team you use (e.g. **janet-duffys-projects**) and grant the [Vercel GitHub app](https://vercel.com/docs/git/vercel-for-github) access to that repository.
+
+**Fix (dashboard)**
+
+1. Open [vercel.com/new](https://vercel.com/new) while logged into the **correct** Vercel team/account.
+2. **Import** `DrJanDuffy/thelakesvegas.com` (Install/configure the GitHub app for the org/repo if prompted).
+3. Confirm **Production Branch** is `main` (Project → Settings → Git).
+4. Set env vars (`NEXT_PUBLIC_SITE_URL`, etc.) and redeploy.
+
+**Fix (CLI, optional)**
+
+```bash
+npx vercel link
+npx vercel git connect
+```
+
+(`vercel git connect` wires an existing Vercel project to the current Git remote — see [Vercel CLI Git](https://vercel.com/docs/cli/git).)
+
+**If the project already exists elsewhere**
+
+- In that project: **Settings → Git** — confirm the connected repository and branch.
+- **Ignored Build Step**: if configured, a script that exits `0` with “don't build” will skip deployments ([docs](https://vercel.com/docs/project-configuration/project-settings#ignored-build-step)).
+- **Git deployments disabled**: `vercel.json` with `git.deploymentEnabled: false` (or deprecated `github.enabled: false`) disables automatic deploys — this repo does **not** include that.
+
+After the project is linked, each push to `main` should create a production deployment (and preview deployments for other branches).
