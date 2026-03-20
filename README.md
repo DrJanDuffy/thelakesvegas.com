@@ -1,6 +1,6 @@
 # thelakesvegas.com
 
-Next.js 15 (App Router) site scaffold with **Google Search Console–ready** routing.
+Next.js 15 (App Router) site ported from **heyberkshire.com** (same BHHS / Dr. Jan Duffy patterns: layout, RealScout, Calendly, neighborhoods, lead + Claude APIs). **Branding** is localized in `src/lib/site-config.ts` (`https://www.thelakesvegas.com`, “The Lakes Las Vegas”).
 
 ## Search Console checklist
 
@@ -30,10 +30,10 @@ npm run build   # or: vercel build (Vercel CLI)
 ## Project layout
 
 - `src/middleware.ts` — **308 redirect** from apex `thelakesvegas.com` → `www.thelakesvegas.com` (skipped on `localhost` and `*.vercel.app`).
-- `src/app/sitemap.ts` — `MetadataRoute.Sitemap` for discoverable URLs.
-- `src/app/robots.ts` — allows crawlers and points to the sitemap.
-- `src/config/site.ts` — resolves canonical base URL from env (default `https://www.thelakesvegas.com`).
-- `src/app/layout.tsx` — `metadataBase`, default SEO fields, optional Google verification.
+- `src/lib/site-config.ts` — site name, URL, NAP-style agent/office fields (keep aligned with GBP). Helpers: `siteUrl("/path")`, `isOwnedSiteHostname()` (lead referrer logic), `localSeo.googleReviewsUrl` (update when The Lakes GBP review link is ready).
+- `src/app/sitemap.ts` / `src/app/robots.ts` — use `getSiteUrl()` from `src/config/site.ts`.
+- `src/app/layout.tsx` — Geist, global JSON-LD, GA, RealScout + Calendly scripts, optional `GOOGLE_SITE_VERIFICATION`.
+- `src/components/` — Navbar, Footer, Hero, RealScout widgets, FAQ, reviews, etc. (from heyberkshire baseline).
 
 ## Vercel audit: `git push` not deploying
 
