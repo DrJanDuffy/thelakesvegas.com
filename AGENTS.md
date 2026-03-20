@@ -32,7 +32,7 @@ GitHub Actions runs the same lint / type-check / build on `main` — see [`.gith
 |------|----------|
 | Site name, URL, NAP-style fields, open house block | [`src/lib/site-config.ts`](src/lib/site-config.ts) |
 | The Lakes FAQ / geo copy (keep in sync with visible FAQ + JSON-LD) | [`src/lib/the-lakes-aeo.ts`](src/lib/the-lakes-aeo.ts) |
-| Canonical URL helper | [`src/config/site.ts`](src/config/site.ts) |
+| Canonical URL helper | [`src/config/site.ts`](src/config/site.ts) — `getSiteUrl()` uses `siteConfig.url` on Vercel **production** (never `*.vercel.app` in sitemap) |
 | Sitemap / robots (GSC) | [`src/app/sitemap.ts`](src/app/sitemap.ts), [`src/app/robots.ts`](src/app/robots.ts) — submit `https://www.thelakesvegas.com/sitemap.xml` in Search Console |
 | Global layout, scripts (RealScout, analytics, verification meta) | [`src/app/layout.tsx`](src/app/layout.tsx) — `GOOGLE_SITE_VERIFICATION` env → `metadata.verification.google` |
 | CSP / security headers | [`next.config.ts`](next.config.ts) |
