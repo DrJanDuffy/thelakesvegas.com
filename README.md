@@ -18,7 +18,7 @@ Official reference: [Google Search Central — Search Console](https://developer
    `https://www.thelakesvegas.com/sitemap.xml`  
    Static marketing URLs are listed in [`src/app/sitemap.ts`](src/app/sitemap.ts); `/listings/[id]` URLs are omitted on purpose (IDX).  
    **Robots:** `https://www.thelakesvegas.com/robots.txt` — from [`src/app/robots.ts`](src/app/robots.ts); allows crawling and references the sitemap; `/api/` is disallowed.  
-   **If GSC shows one error per sitemap row:** open the live `sitemap.xml` and check `<loc>` — every URL must use **`https://www.thelakesvegas.com`**, not `*.vercel.app`. That usually means **`NEXT_PUBLIC_SITE_URL` was missing at build**; set it in Vercel Production and redeploy. [`getSiteUrl()`](src/config/site.ts) also falls back to `siteConfig.url` on Vercel production so sitemaps stay on `www` even if the env var is omitted.
+   **If GSC shows one error per sitemap row:** open the live `sitemap.xml` and check `<loc>` — every URL must use **`https://www.thelakesvegas.com`**, not `*.vercel.app`. That usually means the build used `VERCEL_URL` for a non-preview deploy; set **`NEXT_PUBLIC_SITE_URL`** in Vercel Production and redeploy. [`getSiteUrl()`](src/config/site.ts) uses `siteConfig.url` (`www`) for production and local builds, and **`VERCEL_URL` only when `VERCEL_ENV` is `preview`**.
 
 5. **Post-launch monitoring** — In GSC, watch **Pages** (indexing), **Sitemaps** (success/errors), and **Experience** / **Core Web Vitals** as traffic grows. Use **URL Inspection** on key URLs after large content or template changes.
 
@@ -87,7 +87,7 @@ Vercel uses **Local**, **Preview**, and **Production** by default; Pro/Enterpris
 | Environment | When | This repo |
 |-------------|------|-----------|
 | **Local** | Develop on your machine | Copy `.env.example` → `.env.local`, or after `vercel link`: `vercel env pull` to sync dashboard vars into `.env.local`. |
-| **Preview** | Push a non-`main` branch, open a PR, or `vercel` (no `--prod`) | `getSiteUrl()` in `src/config/site.ts` uses `VERCEL_URL` so sitemap/robots match the preview host. |
+| **Preview** | Push a non-`main` branch, open a PR, or `vercel` (no `--prod`) | `getSiteUrl()` uses `VERCEL_URL` when `VERCEL_ENV` is `preview` so sitemap/robots match the `*.vercel.app` host. |
 | **Production** | Merge to `main` or `vercel --prod` | Set **`NEXT_PUBLIC_SITE_URL=https://www.thelakesvegas.com`** (no trailing slash) so canonical URLs stay `www` even if Vercel’s assigned URL differs. |
 
 **CLI quick reference**
@@ -122,7 +122,7 @@ In GitHub PRs, use **View deployment** (commit) vs **Visit Preview** (branch) as
 - If the project name looks like a normal domain, Vercel may **shorten** it (anti-phishing).
 - **Pro/Enterprise**: [Preview Deployment Suffix](https://vercel.com/docs/deployments/previews/preview-deployment-suffix) replaces `.vercel.app` with your own domain on previews.
 
-**This repo:** On previews, `getSiteUrl()` prefers `VERCEL_URL` so `sitemap.xml` / `robots.txt` match the deployment you’re viewing. Production should still set `NEXT_PUBLIC_SITE_URL` to `https://www.thelakesvegas.com`.
+**This repo:** On previews (`VERCEL_ENV=preview`), `getSiteUrl()` uses `VERCEL_URL` so `sitemap.xml` / `robots.txt` match the preview host. Production uses `siteConfig.url` (`www`) when `NEXT_PUBLIC_SITE_URL` is unset; setting `NEXT_PUBLIC_SITE_URL` in Production is still recommended for explicit canonical control.
 
 ## Project layout
 

@@ -21,19 +21,18 @@ function normalizeExplicitOrigin(raw: string): string {
  * Canonical origin for sitemap, robots, and env overrides (Vercel previews).
  * Apex thelakesvegas.com in NEXT_PUBLIC_SITE_URL is normalized to https://www.thelakesvegas.com.
  *
- * On Vercel **production**, if NEXT_PUBLIC_SITE_URL is missing, we must not use VERCEL_URL
- * (*.vercel.app) — sitemap.xml is still served at www, and GSC rejects cross-host <loc> rows.
+ * Never use VERCEL_URL for the public sitemap unless this is a **preview** deploy.
+ * Production builds may not always expose VERCEL_ENV as expected during static generation;
+ * defaulting to siteConfig.url avoids *.vercel.app <loc> rows on https://www…/sitemap.xml (GSC errors).
  */
 export function getSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (explicit) return normalizeExplicitOrigin(explicit);
 
-  if (process.env.VERCEL_ENV === "production") {
-    return normalizeExplicitOrigin(siteConfig.url);
+  if (process.env.VERCEL_ENV === "preview") {
+    const vercel = process.env.VERCEL_URL?.trim();
+    if (vercel) return `https://${vercel.replace(/\/$/, "")}`;
   }
-
-  const vercel = process.env.VERCEL_URL?.trim();
-  if (vercel) return `https://${vercel.replace(/\/$/, "")}`;
 
   return normalizeExplicitOrigin(siteConfig.url);
 }
