@@ -59,6 +59,36 @@ function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
     location: placeBlock,
   };
 
+  const heroImage = `${baseUrl}/Image/hero_bg_1.jpg`;
+  const organizerPerson = {
+    "@type": "Person" as const,
+    name: agentInfo.name,
+    telephone: "+1-702-500-1942",
+    email: agentInfo.email,
+    url: siteUrl("/"),
+  };
+  const listingRaw = c.listingUrl?.trim();
+  const offerUrl =
+    listingRaw && /^https?:\/\//i.test(listingRaw)
+      ? listingRaw
+      : listingRaw
+        ? siteUrl(listingRaw.startsWith("/") ? listingRaw : `/${listingRaw}`)
+        : siteUrl("/");
+  const eventOffers = {
+    "@type": "Offer" as const,
+    url: offerUrl,
+    price: 0,
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  };
+
+  const eventExtras = {
+    organizer: organizerPerson,
+    performer: organizerPerson,
+    image: heroImage,
+    offers: eventOffers,
+  };
+
   let subEvent: Record<string, unknown> | undefined;
   if (c.sundayStartDate && c.sundayEndDate) {
     const sunStart = Date.parse(c.sundayStartDate);
@@ -71,6 +101,7 @@ function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
         startDate: c.sundayStartDate,
         endDate: c.sundayEndDate,
         ...eventBase,
+        ...eventExtras,
       };
     }
   }
@@ -84,14 +115,7 @@ function buildOpenHouseEventJsonLd(): Record<string, unknown> | null {
     endDate: c.endDate,
     ...eventBase,
     ...(subEvent ? { subEvent } : {}),
-    organizer: {
-      "@type": "Person",
-      name: agentInfo.name,
-      telephone: "+1-702-500-1942",
-      email: agentInfo.email,
-      url: siteUrl("/"),
-    },
-    image: `${baseUrl}/Image/hero_bg_1.jpg`,
+    ...eventExtras,
   };
 }
 
