@@ -29,9 +29,11 @@ export default function Navbar() {
   const serviceLinks = [
     { href: "/buyers", label: "Home Buying" },
     { href: "/sellers", label: "Home Selling" },
+    { href: "/listings", label: "Las Vegas listings (IDX)" },
     { href: "/luxury-homes", label: "Luxury Homes" },
     { href: "/55-plus-communities", label: "55+ Communities" },
     { href: "/new-construction", label: "New Construction" },
+    { href: "/home-valuation", label: "Home valuation" },
     { href: "/market-report", label: "Market Report" },
     { href: "/market-insights", label: "Market Insights" },
   ];

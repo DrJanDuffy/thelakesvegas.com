@@ -69,6 +69,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/listings"
+                  className="text-slate-300 hover:text-white transition-colors text-sm"
+                >
+                  Las Vegas listings on this site
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/neighborhoods"
                   className="text-slate-300 hover:text-white transition-colors text-sm"
                 >
@@ -168,6 +176,22 @@ export default function Footer() {
                   className="text-slate-300 hover:text-white transition-colors text-sm"
                 >
                   Market Insights
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/home-valuation"
+                  className="text-slate-300 hover:text-white transition-colors text-sm"
+                >
+                  Home valuation
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/google-business"
+                  className="text-slate-300 hover:text-white transition-colors text-sm"
+                >
+                  Google Business
                 </Link>
               </li>
             </ul>

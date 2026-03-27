@@ -133,6 +133,44 @@ export default function Home() {
       <main>
         <HeroSection />
 
+        <section
+          aria-label="Explore key areas of this site"
+          className="bg-white border-b border-slate-200 py-6 scroll-mt-24"
+        >
+          <div className="container mx-auto px-4">
+            <p className="text-center text-slate-700 text-sm md:text-base leading-relaxed">
+              <span className="font-semibold text-slate-900">Explore:</span>{" "}
+              <Link href="/neighborhoods" className="text-blue-600 hover:underline">
+                Las Vegas neighborhoods
+              </Link>
+              <span className="text-slate-400 mx-1.5" aria-hidden>
+                ·
+              </span>
+              <Link href="/listings" className="text-blue-600 hover:underline">
+                Las Vegas MLS listings on this site
+              </Link>
+              <span className="text-slate-400 mx-1.5" aria-hidden>
+                ·
+              </span>
+              <Link href="/buyers" className="text-blue-600 hover:underline">
+                Home buying guide
+              </Link>
+              <span className="text-slate-400 mx-1.5" aria-hidden>
+                ·
+              </span>
+              <Link href="/sellers" className="text-blue-600 hover:underline">
+                Selling in The Lakes area
+              </Link>
+              <span className="text-slate-400 mx-1.5" aria-hidden>
+                ·
+              </span>
+              <Link href="/home-valuation" className="text-blue-600 hover:underline">
+                Free home valuation
+              </Link>
+            </p>
+          </div>
+        </section>
+
         {openHouseWeekend.active ? (
           <section
             id="open-house-weekend"

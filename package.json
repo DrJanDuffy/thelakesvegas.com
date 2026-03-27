@@ -17,6 +17,7 @@
     "start": "next start",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
+    "verify:public-seo": "node scripts/verify-public-seo.mjs",
     "vercel-build": "next build"
   },
   "dependencies": {
