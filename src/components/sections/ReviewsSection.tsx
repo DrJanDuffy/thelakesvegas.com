@@ -2,48 +2,12 @@
 
 import { Star, Quote } from "lucide-react";
 import Image from "next/image";
+import { homepageTestimonials, type HomeReview } from "@/lib/home-reviews";
 import { localSeo } from "@/lib/site-config";
 
-export interface Review {
-  id: number;
-  name: string;
-  location: string;
-  rating: number;
-  text: string;
-  image?: string;
-  date?: string;
-}
+export type Review = HomeReview;
 
-// Default reviews
-export const defaultReviews: Review[] = [
-  {
-    id: 1,
-    name: "Tom Sanders",
-    location: "Las Vegas, NV",
-    rating: 5,
-    text: "Dr. Duffy made our home buying experience seamless. Her knowledge of the Las Vegas market is unmatched, and she guided us through every step with professionalism and care.",
-    image: "/Image/person1.jpeg",
-    date: "2025-11-15",
-  },
-  {
-    id: 2,
-    name: "Vitor Palmer",
-    location: "Henderson, NV",
-    rating: 5,
-    text: "We couldn't be happier with our new home! The entire process was smooth, and Dr. Duffy's attention to detail and negotiation skills saved us thousands. Highly recommend!",
-    image: "/Image/person_2-min.jpg",
-    date: "2025-10-22",
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    location: "Summerlin, NV",
-    rating: 5,
-    text: "As first-time homebuyers, we were nervous about the process. Dr. Duffy patiently explained everything and helped us find the perfect home in our budget. Thank you!",
-    image: "/Image/person_4-min.jpg",
-    date: "2025-09-08",
-  },
-];
+export const defaultReviews = homepageTestimonials;
 
 // Aggregate rating stats
 export const aggregateRating = {
@@ -109,8 +73,6 @@ export default function ReviewsSection({
             <div
               key={review.id}
               className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
-              itemScope
-              itemType="https://schema.org/Review"
             >
               <div className="flex items-center mb-4">
                 <div className="relative w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0">
@@ -128,16 +90,12 @@ export default function ReviewsSection({
                   )}
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-900" itemProp="author">
-                    {review.name}
-                  </h3>
+                  <h3 className="font-bold text-slate-900">{review.name}</h3>
                   <p className="text-sm text-slate-600">{review.location}</p>
                 </div>
               </div>
 
-              <div className="flex items-center mb-4" itemProp="reviewRating" itemScope itemType="https://schema.org/Rating">
-                <meta itemProp="ratingValue" content={review.rating.toString()} />
-                <meta itemProp="bestRating" content="5" />
+              <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
@@ -150,9 +108,7 @@ export default function ReviewsSection({
 
               <div className="relative">
                 <Quote className="absolute -top-2 -left-2 h-8 w-8 text-slate-300" aria-hidden />
-                <p className="text-slate-700 relative z-10 pl-4" itemProp="reviewBody">
-                  {review.text}
-                </p>
+                <p className="text-slate-700 relative z-10 pl-4">{review.text}</p>
               </div>
             </div>
           ))}

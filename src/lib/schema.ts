@@ -330,6 +330,34 @@ export function generateAggregateRatingSchema(
 }
 
 /**
+ * Standalone Review nodes for @graph (e.g. homepage). Each references #organization via itemReviewed.
+ */
+export function generateHomepageReviewSchemas(
+  reviews: ReviewItem[]
+): Record<string, unknown>[] {
+  return reviews.map((review, index) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "@id": `${BASE_URL}#review-home-${index + 1}`,
+    author: {
+      "@type": "Person",
+      name: review.author,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.rating.toString(),
+      bestRating: "5",
+      worstRating: "1",
+    },
+    reviewBody: review.reviewBody,
+    datePublished: review.datePublished || new Date().toISOString().split("T")[0],
+    itemReviewed: {
+      "@id": `${BASE_URL}#organization`,
+    },
+  }));
+}
+
+/**
  * Generate Review schema for individual testimonials
  */
 export function generateReviewSchema(reviews: ReviewItem[]) {
@@ -356,6 +384,9 @@ export function generateReviewSchema(reviews: ReviewItem[]) {
       },
       reviewBody: review.reviewBody,
       datePublished: review.datePublished || new Date().toISOString().split("T")[0],
+      itemReviewed: {
+        "@id": `${BASE_URL}#organization`,
+      },
     })),
   };
 }

@@ -133,6 +133,7 @@ export function ReviewSchema({
     };
   }
 
+  const siteOrigin = siteConfig.url.replace(/\/$/, "");
   if (reviews && reviews.length > 0) {
     schema.review = reviews.map((review) => ({
       "@type": "Review",
@@ -148,6 +149,9 @@ export function ReviewSchema({
       },
       reviewBody: review.text,
       datePublished: review.date || new Date().toISOString().split("T")[0],
+      itemReviewed: {
+        "@id": `${siteOrigin}#organization`,
+      },
     }));
   }
 
