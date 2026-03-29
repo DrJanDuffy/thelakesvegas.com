@@ -21,7 +21,7 @@
     "vercel-build": "next build"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.24.0",
+    "@anthropic-ai/sdk": "^0.80.0",
     "@hookform/resolvers": "^3.3.4",
     "@marsidev/react-turnstile": "^1.4.2",
     "@radix-ui/react-slot": "^1.0.2",
